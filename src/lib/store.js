@@ -92,20 +92,32 @@ export async function fetchProfiles() {
 
 // ---- sync ----
 
-// Flush the queue: replay onto fresh head, PUT, retry once on race.
+// Flush the queue: replay onto fresh head, PUT, retry on write race.
+// The queue is re-read every attempt, and only the ops actually flushed are
+// removed afterwards (commit() may append mid-flight — those must survive).
 export async function flushQueue(settings) {
-  let queue = loadQueue()
-  if (!queue.length) return { flushed: 0 }
   for (let attempt = 0; attempt < 3; attempt++) {
+    const queue = loadQueue()
+    if (!queue.length) return { flushed: 0, conflicts: [] }
     const { data: head, sha } = await fetchLatest(settings)
+    // Spec: same-id concurrent edit = last-write-wins WITH a toast. Detect it
+    // by comparing head's updatedAt against what this phone based its edit on.
+    const conflicts = []
+    for (const op of queue) {
+      if (op.type !== 'putRecipe' || !op.baseUpdatedAt) continue
+      // No head copy at all means it was deleted remotely — our edit restores
+      // it (LWW), which deserves a toast just as much as an overwrite does.
+      const theirs = head.recipes.find((r) => r.id === op.recipe.id)
+      if (!theirs || theirs.updatedAt !== op.baseUpdatedAt) conflicts.push(op.recipe.name)
+    }
     let merged = head
     for (const op of queue) merged = applyOp(merged, op)
     const message =
       queue.length === 1 ? opMessage(queue[0]) : `Update ${queue.length} items via app`
     try {
       const { sha: newSha } = await putData(settings, merged, sha, message)
-      saveQueue([])
-      return { flushed: queue.length, data: merged, sha: newSha }
+      saveQueue(loadQueue().slice(queue.length))
+      return { flushed: queue.length, data: merged, sha: newSha, conflicts }
     } catch (e) {
       if (!e.conflict) throw e
       // someone else committed between our read and write — loop re-fetches

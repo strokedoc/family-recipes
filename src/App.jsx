@@ -25,6 +25,8 @@ export default function App() {
   const [sync, setSync] = useState({ state: 'loading', detail: '' }) // loading | readonly | ok | pending | offline | error
   const [toast, setToast] = useState(null)
   const flushing = useRef(false)
+  const dataRef = useRef(null)
+  dataRef.current = data
 
   const showToast = useCallback((msg) => {
     setToast(msg)
@@ -45,10 +47,14 @@ export default function App() {
         .then(({ data: d }) => {
           if (!alive) return
           // Re-apply any queued local edits on top of the fresh copy.
+          const queued = loadQueue()
           let merged = d
-          for (const op of loadQueue()) merged = applyOp(merged, op)
+          for (const op of queued) merged = applyOp(merged, op)
           setData(merged)
-          setSync({ state: s.token ? 'ok' : 'readonly', detail: '' })
+          const idle = s.token ? 'ok' : 'readonly'
+          setSync({ state: queued.length && s.token ? 'pending' : idle, detail: '' })
+          // Edits left over from a previous session flush now, not on the next edit.
+          tryFlush()
         })
         .catch(() => alive && setSync({ state: navigator.onLine ? 'error' : 'offline', detail: '' }))
     } else {
@@ -67,23 +73,41 @@ export default function App() {
       return
     }
     flushing.current = true
+    let leftover = false
     try {
       const result = await flushQueue(s)
-      if (result.data) setData(result.data)
-      setPending(0)
-      setSync({ state: 'ok', detail: '' })
+      // Edits committed while the PUT was in flight are still queued — keep
+      // them visible in state and flush again below.
+      const rest = loadQueue()
+      if (result.data) {
+        let merged = result.data
+        for (const op of rest) merged = applyOp(merged, op)
+        setData(merged)
+      }
+      setPending(rest.length)
+      setSync(rest.length ? { state: 'pending', detail: '' } : { state: 'ok', detail: '' })
+      if (result.conflicts?.length)
+        showToast(`Heads up: your edit replaced a newer change to ${result.conflicts.join(', ')}`)
+      leftover = rest.length > 0
     } catch (e) {
       setPending(loadQueue().length)
       setSync({ state: navigator.onLine ? 'error' : 'offline', detail: e.message })
     } finally {
       flushing.current = false
     }
-  }, [])
+    if (leftover) tryFlush()
+  }, [showToast])
 
   // Any edit: optimistic apply + queue + attempt flush.
   const commit = useCallback(
     (op) => {
       op.at = new Date().toISOString()
+      if (op.type === 'putRecipe') {
+        // Version this edit was based on — lets the flusher detect that the
+        // other phone changed the same recipe in between (spec: LWW + toast).
+        const base = dataRef.current?.recipes.find((r) => r.id === op.recipe.id)
+        op.baseUpdatedAt = base?.updatedAt || null
+      }
       setData((d) => applyOp(d, op))
       const q = loadQueue()
       q.push(op)
@@ -214,7 +238,8 @@ const SYNC_LABEL = {
 
 function Header({ nav, setNav, sync, pending, onRetry }) {
   const [dotClass, label] = SYNC_LABEL[sync.state] || SYNC_LABEL.loading
-  const showPending = pending > 0 && sync.state !== 'ok'
+  // Unsynced edits are never hidden behind a green "Synced" label.
+  const showPending = pending > 0
   return (
     <header className="header">
       <button className="brand" onClick={() => setNav({ view: 'browse' })}>

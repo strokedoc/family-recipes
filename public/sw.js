@@ -3,6 +3,9 @@
 const VERSION = 'rasoi-v1'
 
 self.addEventListener('install', (e) => {
+  // Precache the shell entry so offline reload works even if the runtime
+  // cache never saw a navigation request.
+  e.waitUntil(caches.open(VERSION).then((c) => c.addAll(['./', './manifest.webmanifest'])))
   self.skipWaiting()
 })
 
