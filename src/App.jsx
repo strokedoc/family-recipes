@@ -1,0 +1,251 @@
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import Browse from './views/Browse.jsx'
+import Recipe from './views/Recipe.jsx'
+import RecipeEdit from './views/RecipeEdit.jsx'
+import Library from './views/Library.jsx'
+import Settings from './views/Settings.jsx'
+import {
+  loadSettings,
+  saveSettings,
+  loadQueue,
+  saveQueue,
+  applyOp,
+  fetchLocalData,
+  fetchProfiles,
+  flushQueue,
+} from './lib/store.js'
+import { fetchLatest } from './lib/github.js'
+
+export default function App() {
+  const [nav, setNav] = useState({ view: 'browse' })
+  const [data, setData] = useState(null)
+  const [profiles, setProfiles] = useState(null)
+  const [settings, setSettings] = useState(loadSettings)
+  const [pending, setPending] = useState(loadQueue().length)
+  const [sync, setSync] = useState({ state: 'loading', detail: '' }) // loading | readonly | ok | pending | offline | error
+  const [toast, setToast] = useState(null)
+  const flushing = useRef(false)
+
+  const showToast = useCallback((msg) => {
+    setToast(msg)
+    window.clearTimeout(showToast.t)
+    showToast.t = window.setTimeout(() => setToast(null), 3500)
+  }, [])
+
+  // Initial load: local file first (fast, offline-capable), then API for freshness.
+  useEffect(() => {
+    let alive = true
+    fetchProfiles().then((p) => alive && setProfiles(p))
+    fetchLocalData()
+      .then((d) => alive && setData((cur) => cur || d))
+      .catch(() => alive && setSync({ state: 'error', detail: 'Could not load recipes' }))
+    const s = loadSettings()
+    if (s.repo) {
+      fetchLatest(s)
+        .then(({ data: d }) => {
+          if (!alive) return
+          // Re-apply any queued local edits on top of the fresh copy.
+          let merged = d
+          for (const op of loadQueue()) merged = applyOp(merged, op)
+          setData(merged)
+          setSync({ state: s.token ? 'ok' : 'readonly', detail: '' })
+        })
+        .catch(() => alive && setSync({ state: navigator.onLine ? 'error' : 'offline', detail: '' }))
+    } else {
+      setSync({ state: 'readonly', detail: '' })
+    }
+    return () => {
+      alive = false
+    }
+  }, [])
+
+  const tryFlush = useCallback(async () => {
+    const s = loadSettings()
+    if (flushing.current || !s.token || !s.repo || !loadQueue().length) return
+    if (!navigator.onLine) {
+      setSync({ state: 'offline', detail: '' })
+      return
+    }
+    flushing.current = true
+    try {
+      const result = await flushQueue(s)
+      if (result.data) setData(result.data)
+      setPending(0)
+      setSync({ state: 'ok', detail: '' })
+    } catch (e) {
+      setPending(loadQueue().length)
+      setSync({ state: navigator.onLine ? 'error' : 'offline', detail: e.message })
+    } finally {
+      flushing.current = false
+    }
+  }, [])
+
+  // Any edit: optimistic apply + queue + attempt flush.
+  const commit = useCallback(
+    (op) => {
+      op.at = new Date().toISOString()
+      setData((d) => applyOp(d, op))
+      const q = loadQueue()
+      q.push(op)
+      saveQueue(q)
+      setPending(q.length)
+      const s = loadSettings()
+      if (!s.token) {
+        setSync({ state: 'readonly', detail: '' })
+        showToast('Saved on this phone only — add a GitHub token in Settings to sync')
+      } else {
+        setSync({ state: 'pending', detail: '' })
+        tryFlush()
+      }
+    },
+    [tryFlush, showToast],
+  )
+
+  useEffect(() => {
+    const onOnline = () => tryFlush()
+    window.addEventListener('online', onOnline)
+    return () => window.removeEventListener('online', onOnline)
+  }, [tryFlush])
+
+  const updateSettings = useCallback(
+    (s) => {
+      saveSettings(s)
+      setSettings(s)
+      if (s.repo) {
+        fetchLatest(s)
+          .then(({ data: d }) => {
+            let merged = d
+            for (const op of loadQueue()) merged = applyOp(merged, op)
+            setData(merged)
+            setSync({ state: s.token ? 'ok' : 'readonly', detail: '' })
+            tryFlush()
+          })
+          .catch(() => {})
+      }
+    },
+    [tryFlush],
+  )
+
+  const recipe = useMemo(
+    () => (nav.id && data ? data.recipes.find((r) => r.id === nav.id) : null),
+    [nav, data],
+  )
+
+  if (!data) {
+    return (
+      <div className="app">
+        <div className="loading">
+          <span className="loading-mark">રસોઈ</span>
+          <span>Warming up…</span>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="app">
+      <Header
+        nav={nav}
+        setNav={setNav}
+        sync={sync}
+        pending={pending}
+        onRetry={tryFlush}
+      />
+      <main className="main">
+        {nav.view === 'browse' && (
+          <Browse data={data} openRecipe={(id) => setNav({ view: 'recipe', id })} setNav={setNav} />
+        )}
+        {nav.view === 'recipe' && recipe && (
+          <Recipe
+            recipe={recipe}
+            data={data}
+            profiles={profiles}
+            commit={commit}
+            showToast={showToast}
+            onEdit={() => setNav({ view: 'edit', id: recipe.id })}
+            onBack={() => setNav({ view: 'browse' })}
+          />
+        )}
+        {nav.view === 'edit' && recipe && (
+          <RecipeEdit
+            key={recipe.id}
+            recipe={recipe}
+            data={data}
+            commit={commit}
+            showToast={showToast}
+            onDone={(id) => setNav({ view: 'recipe', id })}
+            onDeleted={() => setNav({ view: 'browse' })}
+          />
+        )}
+        {nav.view === 'new' && (
+          <RecipeEdit
+            key="new"
+            recipe={null}
+            data={data}
+            commit={commit}
+            showToast={showToast}
+            onDone={(id) => setNav({ view: 'recipe', id })}
+            onDeleted={() => setNav({ view: 'browse' })}
+          />
+        )}
+        {nav.view === 'library' && (
+          <Library data={data} commit={commit} showToast={showToast} onBack={() => setNav({ view: 'browse' })} />
+        )}
+        {nav.view === 'settings' && (
+          <Settings settings={settings} onSave={updateSettings} onBack={() => setNav({ view: 'browse' })} />
+        )}
+        {(nav.view === 'recipe' || nav.view === 'edit') && !recipe && (
+          <div className="empty">Recipe not found.</div>
+        )}
+      </main>
+      {toast && <div className="toast">{toast}</div>}
+    </div>
+  )
+}
+
+const SYNC_LABEL = {
+  loading: ['sync-dot loading', 'Loading'],
+  ok: ['sync-dot ok', 'Synced'],
+  readonly: ['sync-dot readonly', 'Read-only'],
+  pending: ['sync-dot pending', 'Syncing'],
+  offline: ['sync-dot pending', 'Offline'],
+  error: ['sync-dot error', 'Sync error'],
+}
+
+function Header({ nav, setNav, sync, pending, onRetry }) {
+  const [dotClass, label] = SYNC_LABEL[sync.state] || SYNC_LABEL.loading
+  const showPending = pending > 0 && sync.state !== 'ok'
+  return (
+    <header className="header">
+      <button className="brand" onClick={() => setNav({ view: 'browse' })}>
+        <span className="brand-mark">રસોઈ</span>
+        <span className="brand-name">Rasoi</span>
+      </button>
+      <div className="header-right">
+        <button
+          className="sync-chip"
+          onClick={onRetry}
+          title={sync.detail || label}
+          aria-label={`Sync status: ${label}`}
+        >
+          <span className={dotClass} />
+          {showPending ? `${pending} pending` : label}
+        </button>
+        <button
+          className={`icon-btn ${nav.view === 'library' ? 'active' : ''}`}
+          onClick={() => setNav({ view: 'library' })}
+          aria-label="Ingredient library"
+        >
+          ⚖︎
+        </button>
+        <button
+          className={`icon-btn ${nav.view === 'settings' ? 'active' : ''}`}
+          onClick={() => setNav({ view: 'settings' })}
+          aria-label="Settings"
+        >
+          ⚙︎
+        </button>
+      </div>
+    </header>
+  )
+}

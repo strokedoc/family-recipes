@@ -1,0 +1,330 @@
+{
+  "version": 1,
+  "ingredients": {
+    "soya-chunks-dry": { "name": "Soya chunks/granules (dry)", "per100g": { "kcal": 345, "protein": 52, "carbs": 33, "fat": 0.5, "fiber": 13 }, "tags": ["protein-anchor"] },
+    "toor-dal-dry": { "name": "Toor dal (dry)", "per100g": { "kcal": 343, "protein": 22, "carbs": 63, "fat": 1.5, "fiber": 15 }, "tags": ["dal"] },
+    "moong-dal-dry": { "name": "Moong dal, split (dry)", "per100g": { "kcal": 347, "protein": 24, "carbs": 59, "fat": 1.2, "fiber": 16 }, "tags": ["dal"] },
+    "chickpeas-dry": { "name": "Chickpeas / kabuli chana (dry)", "per100g": { "kcal": 378, "protein": 21, "carbs": 63, "fat": 6, "fiber": 12 }, "tags": ["legume"] },
+    "moong-sprouts": { "name": "Moong sprouts (raw)", "per100g": { "kcal": 30, "protein": 3, "carbs": 5.9, "fat": 0.2, "fiber": 1.8 }, "tags": ["legume"] },
+    "besan": { "name": "Besan (gram flour)", "per100g": { "kcal": 387, "protein": 22, "carbs": 58, "fat": 7, "fiber": 11 }, "tags": ["flour"] },
+    "atta": { "name": "Whole wheat atta", "per100g": { "kcal": 340, "protein": 12, "carbs": 72, "fat": 2.5, "fiber": 11 }, "tags": ["flour"] },
+    "rolled-oats": { "name": "Rolled oats", "per100g": { "kcal": 379, "protein": 13, "carbs": 68, "fat": 6.5, "fiber": 10 }, "tags": ["grain"] },
+    "poha-dry": { "name": "Poha, thick (dry)", "per100g": { "kcal": 350, "protein": 7, "carbs": 78, "fat": 1, "fiber": 2 }, "tags": ["grain"] },
+    "paneer-low-fat": { "name": "Paneer, low-fat (Amul-style)", "per100g": { "kcal": 182, "protein": 20, "carbs": 5, "fat": 8, "fiber": 0 }, "tags": ["dairy", "protein-anchor"] },
+    "paneer-whole": { "name": "Paneer, whole milk", "per100g": { "kcal": 296, "protein": 18, "carbs": 4, "fat": 23, "fiber": 0 }, "tags": ["dairy", "protein-anchor"] },
+    "tofu-firm": { "name": "Tofu, firm", "per100g": { "kcal": 96, "protein": 10, "carbs": 3, "fat": 5, "fiber": 1 }, "tags": ["protein-anchor"] },
+    "fage-0": { "name": "Greek yogurt 0% (Fage)", "per100g": { "kcal": 59, "protein": 10.3, "carbs": 3.6, "fat": 0.4, "fiber": 0 }, "tags": ["dairy", "protein-anchor"] },
+    "milk-2pct": { "name": "Milk, 2%", "per100g": { "kcal": 50, "protein": 3.4, "carbs": 4.9, "fat": 2, "fiber": 0 }, "tags": ["dairy"] },
+    "whey-levels": { "name": "Whey protein (Levels), powder", "per100g": { "kcal": 419, "protein": 77, "carbs": 13, "fat": 6, "fiber": 0 }, "tags": ["protein-anchor"], "note": "1 scoop = 31 g" },
+    "peanut-butter": { "name": "Peanut butter, natural", "per100g": { "kcal": 588, "protein": 25, "carbs": 20, "fat": 50, "fiber": 6 }, "tags": ["fat"] },
+    "peanuts": { "name": "Peanuts, raw", "per100g": { "kcal": 567, "protein": 26, "carbs": 16, "fat": 49, "fiber": 9 }, "tags": ["fat"] },
+    "chia": { "name": "Chia seeds", "per100g": { "kcal": 486, "protein": 17, "carbs": 42, "fat": 31, "fiber": 34 }, "tags": ["seed"] },
+    "hemp-hearts": { "name": "Hemp hearts", "per100g": { "kcal": 553, "protein": 32, "carbs": 9, "fat": 49, "fiber": 4 }, "tags": ["seed"] },
+    "oil": { "name": "Cooking oil", "per100g": { "kcal": 884, "protein": 0, "carbs": 0, "fat": 100, "fiber": 0 }, "tags": ["fat"] },
+    "ghee": { "name": "Ghee", "per100g": { "kcal": 900, "protein": 0, "carbs": 0, "fat": 100, "fiber": 0 }, "tags": ["fat"] },
+    "onion": { "name": "Onion", "per100g": { "kcal": 40, "protein": 1.1, "carbs": 9.3, "fat": 0.1, "fiber": 1.7 }, "tags": ["veg"] },
+    "tomato": { "name": "Tomato", "per100g": { "kcal": 18, "protein": 0.9, "carbs": 3.9, "fat": 0.2, "fiber": 1.2 }, "tags": ["veg"] },
+    "spinach": { "name": "Spinach", "per100g": { "kcal": 23, "protein": 2.9, "carbs": 3.6, "fat": 0.4, "fiber": 2.2 }, "tags": ["veg"] },
+    "capsicum": { "name": "Capsicum", "per100g": { "kcal": 26, "protein": 1, "carbs": 6, "fat": 0.3, "fiber": 2 }, "tags": ["veg"] },
+    "green-peas": { "name": "Green peas (frozen)", "per100g": { "kcal": 81, "protein": 5.4, "carbs": 14, "fat": 0.4, "fiber": 5.7 }, "tags": ["veg"] },
+    "mixed-berries": { "name": "Mixed berries (frozen)", "per100g": { "kcal": 44, "protein": 0.7, "carbs": 11, "fat": 0.3, "fiber": 3.5 }, "tags": ["fruit"] },
+    "dates": { "name": "Dates, pitted", "per100g": { "kcal": 282, "protein": 2.5, "carbs": 75, "fat": 0.4, "fiber": 8 }, "tags": ["fruit"] },
+    "cocoa": { "name": "Cocoa powder, unsweetened", "per100g": { "kcal": 228, "protein": 20, "carbs": 58, "fat": 14, "fiber": 33 }, "tags": ["flavor"] },
+    "maple-syrup": { "name": "Maple syrup", "per100g": { "kcal": 260, "protein": 0, "carbs": 67, "fat": 0, "fiber": 0 }, "tags": ["sweetener"] },
+    "pistachios": { "name": "Pistachios", "per100g": { "kcal": 560, "protein": 20, "carbs": 28, "fat": 45, "fiber": 10 }, "tags": ["nut"] }
+  },
+  "recipes": [
+    {
+      "id": "morning-smoothie",
+      "name": "Morning protein smoothie",
+      "category": "breakfast",
+      "servings": 1,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        { "ref": "whey-levels", "grams": 31, "note": "1 scoop" },
+        { "ref": "fage-0", "grams": 100 },
+        { "ref": "milk-2pct", "grams": 200 },
+        { "ref": "peanut-butter", "grams": 8, "note": "1/2 tbsp" },
+        { "ref": "chia", "grams": 8, "note": "1/2 tbsp" },
+        { "ref": "hemp-hearts", "grams": 8, "note": "1/2 tbsp" },
+        { "ref": "mixed-berries", "grams": 60 },
+        { "ref": "spinach", "grams": 30 }
+      ],
+      "steps": ["Blend everything with ice.", "Add 5 g creatine (no nutrition impact)."],
+      "tags": ["daily-constant", "post-workout"],
+      "notes": "Seed values run ~5% above the owner's Cronometer log (425 kcal / 44 g). Calibrate grams to match.",
+      "source": "seed",
+      "updatedAt": "2026-08-30T00:00:00Z"
+    },
+    {
+      "id": "besan-chilla-paneer",
+      "name": "Besan chilla with paneer stuffing",
+      "category": "breakfast",
+      "servings": 1,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        { "ref": "besan", "grams": 50, "note": "dry" },
+        { "ref": "paneer-low-fat", "grams": 60, "note": "crumbled" },
+        { "ref": "onion", "grams": 30 },
+        { "ref": "tomato", "grams": 30 },
+        { "ref": "oil", "grams": 5, "note": "~1 tsp for the tawa" }
+      ],
+      "steps": ["Thin besan batter with water, salt, turmeric, ajwain.", "Cook 2 chilla; stuff with spiced crumbled paneer.", "Serve with mint chutney."],
+      "tags": ["gujarati", "high-protein"],
+      "source": "seed",
+      "updatedAt": "2026-08-30T00:00:00Z"
+    },
+    {
+      "id": "moong-dal-chilla",
+      "name": "Moong dal chilla",
+      "category": "breakfast",
+      "servings": 1,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        { "ref": "moong-dal-dry", "grams": 60, "note": "soaked 4h, then ground" },
+        { "ref": "onion", "grams": 30 },
+        { "ref": "oil", "grams": 5 }
+      ],
+      "steps": ["Grind soaked dal with ginger, green chili, salt.", "Cook 2 chilla on a hot tawa.", "Optional: +50 g paneer stuffing (+91 kcal, +10 g protein)."],
+      "tags": ["high-protein", "light"],
+      "source": "seed",
+      "updatedAt": "2026-08-30T00:00:00Z"
+    },
+    {
+      "id": "masala-oats-paneer",
+      "name": "Masala oats with paneer",
+      "category": "breakfast",
+      "servings": 1,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        { "ref": "rolled-oats", "grams": 40 },
+        { "ref": "milk-2pct", "grams": 200 },
+        { "ref": "paneer-low-fat", "grams": 80, "note": "cubes, stirred in at the end" },
+        { "ref": "green-peas", "grams": 40 },
+        { "ref": "tomato", "grams": 40 }
+      ],
+      "steps": ["Cook oats in milk with jeera, turmeric, veg.", "Fold in paneer off heat."],
+      "tags": ["quick"],
+      "source": "seed",
+      "updatedAt": "2026-08-30T00:00:00Z"
+    },
+    {
+      "id": "protein-poha",
+      "name": "Protein poha",
+      "category": "breakfast",
+      "servings": 2,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        { "ref": "poha-dry", "grams": 100, "note": "rinsed" },
+        { "ref": "soya-chunks-dry", "grams": 30, "note": "granules, soaked" },
+        { "ref": "peanuts", "grams": 30 },
+        { "ref": "onion", "grams": 80 },
+        { "ref": "green-peas", "grams": 50 },
+        { "ref": "oil", "grams": 10 }
+      ],
+      "steps": ["Temper mustard seeds and curry leaves in oil; add peanuts, onion.", "Add soaked soya granules, then poha, turmeric, salt, lime."],
+      "tags": ["gujarati", "weekend"],
+      "source": "seed",
+      "updatedAt": "2026-08-30T00:00:00Z"
+    },
+    {
+      "id": "soya-keema",
+      "name": "Soya keema sabzi",
+      "category": "lunch-dinner",
+      "servings": 4,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        { "ref": "soya-chunks-dry", "grams": 120, "note": "granules, dry weight" },
+        { "ref": "onion", "grams": 150 },
+        { "ref": "tomato", "grams": 200 },
+        { "ref": "green-peas", "grams": 100 },
+        { "ref": "oil", "grams": 20 }
+      ],
+      "steps": ["Soak granules in hot water 10 min, squeeze dry.", "Brown onion in oil; add ginger-garlic, tomato, keema masala.", "Add soya and peas; cook 10 min."],
+      "tags": ["high-protein", "freezes-well", "build-first"],
+      "notes": "Highest protein-per-calorie dish in the database. The one to cook weekly.",
+      "source": "seed",
+      "updatedAt": "2026-08-30T00:00:00Z"
+    },
+    {
+      "id": "protein-toor-dal",
+      "name": "Protein toor dal (soya-boosted)",
+      "category": "lunch-dinner",
+      "servings": 4,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        { "ref": "toor-dal-dry", "grams": 150 },
+        { "ref": "soya-chunks-dry", "grams": 60, "note": "granules, cooked in" },
+        { "ref": "tomato", "grams": 100 },
+        { "ref": "onion", "grams": 80 },
+        { "ref": "ghee", "grams": 15, "note": "tempering" }
+      ],
+      "steps": ["Pressure-cook dal with soya granules and turmeric.", "Gujarati tadka: ghee, mustard, hing, curry leaves; balance sweet-sour lightly."],
+      "tags": ["gujarati", "daily-staple"],
+      "notes": "Granules disappear into the dal. ~2x the protein of plain dal.",
+      "source": "seed",
+      "updatedAt": "2026-08-30T00:00:00Z"
+    },
+    {
+      "id": "paneer-bhurji",
+      "name": "Paneer bhurji",
+      "category": "lunch-dinner",
+      "servings": 2,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        { "ref": "paneer-low-fat", "grams": 200 },
+        { "ref": "onion", "grams": 100 },
+        { "ref": "tomato", "grams": 100 },
+        { "ref": "capsicum", "grams": 80 },
+        { "ref": "oil", "grams": 10 }
+      ],
+      "steps": ["Sauté onion, capsicum; add tomato and pav-bhaji or garam masala.", "Crumble in paneer, cook 3-4 min."],
+      "tags": ["quick", "high-protein"],
+      "notes": "Swap to whole-milk paneer: +115 kcal/serving. Swap to tofu-firm 300 g for the lighter version.",
+      "source": "seed",
+      "updatedAt": "2026-08-30T00:00:00Z"
+    },
+    {
+      "id": "tofu-bhurji",
+      "name": "Tofu bhurji",
+      "category": "lunch-dinner",
+      "servings": 2,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        { "ref": "tofu-firm", "grams": 300 },
+        { "ref": "onion", "grams": 100 },
+        { "ref": "tomato", "grams": 100 },
+        { "ref": "capsicum", "grams": 80 },
+        { "ref": "oil", "grams": 10 }
+      ],
+      "steps": ["Same method as paneer bhurji; press tofu first, finish with kasuri methi."],
+      "tags": ["quick", "light", "vruddhi-friendly"],
+      "source": "seed",
+      "updatedAt": "2026-08-30T00:00:00Z"
+    },
+    {
+      "id": "chole",
+      "name": "Chole masala",
+      "category": "lunch-dinner",
+      "servings": 4,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        { "ref": "chickpeas-dry", "grams": 200, "note": "soaked overnight" },
+        { "ref": "onion", "grams": 150 },
+        { "ref": "tomato", "grams": 200 },
+        { "ref": "oil", "grams": 20 }
+      ],
+      "steps": ["Pressure-cook chana with tea bag for color.", "Onion-tomato masala with chole masala; simmer 15 min."],
+      "tags": ["legume"],
+      "notes": "Pair with Fage raita (150 g = 89 kcal / 15 g protein) to lift the meal's protein.",
+      "source": "seed",
+      "updatedAt": "2026-08-30T00:00:00Z"
+    },
+    {
+      "id": "palak-paneer",
+      "name": "Palak paneer (light)",
+      "category": "lunch-dinner",
+      "servings": 3,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        { "ref": "spinach", "grams": 400 },
+        { "ref": "paneer-low-fat", "grams": 250 },
+        { "ref": "onion", "grams": 80 },
+        { "ref": "tomato", "grams": 80 },
+        { "ref": "oil", "grams": 15 },
+        { "ref": "milk-2pct", "grams": 50, "note": "instead of cream" }
+      ],
+      "steps": ["Blanch and purée spinach.", "Cook masala, add purée, milk, then paneer cubes."],
+      "tags": ["high-protein", "iron"],
+      "source": "seed",
+      "updatedAt": "2026-08-30T00:00:00Z"
+    },
+    {
+      "id": "fage-kadhi",
+      "name": "Gujarati kadhi (Greek yogurt)",
+      "category": "lunch-dinner",
+      "servings": 3,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        { "ref": "fage-0", "grams": 300, "note": "whisked with water to buttermilk consistency" },
+        { "ref": "besan", "grams": 40 },
+        { "ref": "ghee", "grams": 10, "note": "tempering" }
+      ],
+      "steps": ["Whisk yogurt, besan, water smooth; simmer gently, stirring.", "Temper: ghee, mustard, methi seeds, curry leaves, ginger-chili; light jaggery to taste."],
+      "tags": ["gujarati", "daily-staple"],
+      "notes": "Fage swap roughly doubles the protein of dahi kadhi at fewer calories.",
+      "source": "seed",
+      "updatedAt": "2026-08-30T00:00:00Z"
+    },
+    {
+      "id": "sprouted-moong-chaat",
+      "name": "Sprouted moong chaat",
+      "category": "snack",
+      "servings": 2,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        { "ref": "moong-sprouts", "grams": 300, "note": "steamed 5 min" },
+        { "ref": "onion", "grams": 60 },
+        { "ref": "tomato", "grams": 80 },
+        { "ref": "peanuts", "grams": 20 }
+      ],
+      "steps": ["Toss everything with lime, chaat masala, coriander."],
+      "tags": ["light", "evening-snack"],
+      "source": "seed",
+      "updatedAt": "2026-08-30T00:00:00Z"
+    },
+    {
+      "id": "shrikhand-fage",
+      "name": "Shrikhand (Greek yogurt)",
+      "category": "dessert",
+      "servings": 2,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        { "ref": "fage-0", "grams": 300 },
+        { "ref": "maple-syrup", "grams": 20, "note": "or powdered sugar" },
+        { "ref": "pistachios", "grams": 10, "note": "chopped, on top" }
+      ],
+      "steps": ["Whisk yogurt with sweetener, cardamom, saffron soaked in 1 tsp warm milk.", "Chill 30 min; top with pistachio."],
+      "tags": ["gujarati", "dessert", "no-cook"],
+      "notes": "Real shrikhand at a third of the calories. ~17 g protein per serving.",
+      "source": "seed",
+      "updatedAt": "2026-08-30T00:00:00Z"
+    },
+    {
+      "id": "date-cocoa-ladoo",
+      "name": "Date-cocoa protein ladoo",
+      "category": "dessert",
+      "servings": 8,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        { "ref": "dates", "grams": 150, "note": "soaked if hard" },
+        { "ref": "peanut-butter", "grams": 60 },
+        { "ref": "whey-levels", "grams": 62, "note": "2 scoops" },
+        { "ref": "cocoa", "grams": 20 }
+      ],
+      "steps": ["Blitz dates to a paste; knead everything together.", "Roll 8 ladoos; refrigerate. 1 serving = 1 ladoo."],
+      "tags": ["dessert", "make-ahead"],
+      "notes": "~135 kcal / 9 g protein per ladoo. Batch keeps 2 weeks refrigerated.",
+      "source": "seed",
+      "updatedAt": "2026-08-30T00:00:00Z"
+    },
+    {
+      "id": "chocolate-yogurt-mousse",
+      "name": "Chocolate yogurt mousse",
+      "category": "dessert",
+      "servings": 2,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        { "ref": "fage-0", "grams": 300 },
+        { "ref": "cocoa", "grams": 15 },
+        { "ref": "whey-levels", "grams": 31, "note": "1 scoop" },
+        { "ref": "maple-syrup", "grams": 15 }
+      ],
+      "steps": ["Whisk everything until glossy; chill 1 hour.", "Optional berries on top."],
+      "tags": ["dessert", "no-cook", "high-protein"],
+      "notes": "~190 kcal / 29 g protein per serving — a dessert that doubles as the fourth feeding.",
+      "source": "seed",
+      "updatedAt": "2026-08-30T00:00:00Z"
+    }
+  ]
+}
