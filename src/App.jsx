@@ -17,6 +17,7 @@ import {
   flushQueue,
 } from './lib/store.js'
 import { fetchLatest } from './lib/github.js'
+import { EDIT_PIN, GATED_OPS, isUnlocked, unlock } from './lib/editlock.js'
 
 export default function App() {
   const [nav, setNav] = useState({ view: 'browse' })
@@ -26,6 +27,7 @@ export default function App() {
   const [pending, setPending] = useState(loadQueue().length)
   const [sync, setSync] = useState({ state: 'loading', detail: '' }) // loading | readonly | ok | pending | offline | error
   const [toast, setToast] = useState(null)
+  const [pinOp, setPinOp] = useState(null) // op held back until the edit PIN is entered
   const flushing = useRef(false)
   const dataRef = useRef(null)
   dataRef.current = data
@@ -103,6 +105,11 @@ export default function App() {
   // Any edit: optimistic apply + queue + attempt flush.
   const commit = useCallback(
     (op) => {
+      // Soft edit gate: recipe/ingredient changes need the shared PIN once per device.
+      if (GATED_OPS.has(op.type) && !isUnlocked()) {
+        setPinOp(op)
+        return
+      }
       op.at = new Date().toISOString()
       if (op.type === 'putRecipe') {
         // Version this edit was based on — lets the flusher detect that the
@@ -252,6 +259,64 @@ export default function App() {
         )}
       </main>
       {toast && <div className="toast">{toast}</div>}
+      {pinOp && (
+        <PinGate
+          onCancel={() => {
+            setPinOp(null)
+            showToast('Edit cancelled')
+          }}
+          onUnlock={() => {
+            unlock()
+            const op = pinOp
+            setPinOp(null)
+            commit(op)
+          }}
+        />
+      )}
+    </div>
+  )
+}
+
+function PinGate({ onCancel, onUnlock }) {
+  const [val, setVal] = useState('')
+  const [err, setErr] = useState(false)
+  function submit() {
+    if (val === EDIT_PIN) onUnlock()
+    else {
+      setErr(true)
+      setVal('')
+    }
+  }
+  return (
+    <div className="pin-backdrop" onClick={onCancel}>
+      <div className="pin-card" onClick={(e) => e.stopPropagation()}>
+        <h2 className="pin-title">Enter edit PIN</h2>
+        <p className="pin-hint">
+          Asked once on this device. Stays unlocked until you tap “Lock editing” in Settings.
+        </p>
+        <input
+          className={`pin-input ${err ? 'err' : ''}`}
+          type="password"
+          inputMode="numeric"
+          autoComplete="off"
+          autoFocus
+          value={val}
+          onChange={(e) => {
+            setVal(e.target.value)
+            setErr(false)
+          }}
+          onKeyDown={(e) => e.key === 'Enter' && submit()}
+        />
+        {err && <div className="pin-err">Wrong PIN — try again.</div>}
+        <div className="pin-actions">
+          <button className="pin-btn ghost" onClick={onCancel}>
+            Cancel
+          </button>
+          <button className="pin-btn primary" onClick={submit}>
+            Unlock
+          </button>
+        </div>
+      </div>
     </div>
   )
 }

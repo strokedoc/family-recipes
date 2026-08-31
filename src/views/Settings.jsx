@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { testConnection } from '../lib/github.js'
+import { EDIT_PIN, isUnlocked, lock } from '../lib/editlock.js'
 
 export default function Settings({ settings, onSave, onBack }) {
   const [repo, setRepo] = useState(settings.repo || '')
   const [token, setToken] = useState(settings.token || '')
   const [status, setStatus] = useState(null) // {ok, msg}
   const [testing, setTesting] = useState(false)
+  const [unlocked, setUnlocked] = useState(isUnlocked())
 
   async function saveAndTest() {
     const next = { repo: repo.trim(), token: token.trim() }
@@ -71,6 +73,27 @@ export default function Settings({ settings, onSave, onBack }) {
         No token? Everything still works for reading — that's the intended fallback, not an error.
         The token stays in this phone's storage only; it is never sent anywhere except GitHub.
       </p>
+
+      <h2 className="detail-subtitle">Editing lock</h2>
+      <p className="library-hint">
+        Adding, changing or deleting a recipe or ingredient asks for a PIN (<strong>{EDIT_PIN}</strong>)
+        the first time on each device, then stays unlocked. Meal schedule and grocery list aren't
+        locked. This only guards the app's edit screens — it isn't security.
+      </p>
+      <div className={`status ${unlocked ? 'ok' : ''}`}>
+        {unlocked ? 'Editing is unlocked on this device.' : 'Editing is locked on this device.'}
+      </div>
+      {unlocked && (
+        <button
+          className="primary-btn"
+          onClick={() => {
+            lock()
+            setUnlocked(false)
+          }}
+        >
+          Lock editing
+        </button>
+      )}
     </div>
   )
 }

@@ -955,3 +955,87 @@ textarea:focus {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
   animation: rise 0.2s ease;
 }
+
+/* ---- edit PIN gate ---- */
+.detail-subtitle {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--ink);
+  margin: 22px 0 6px;
+}
+.pin-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(51, 36, 26, 0.5);
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.pin-card {
+  background: var(--card);
+  border: 1.5px solid var(--line);
+  border-radius: 18px;
+  padding: 20px;
+  width: 100%;
+  max-width: 340px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+  animation: rise 0.18s ease;
+}
+.pin-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+.pin-hint {
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+  margin: 0 0 14px;
+}
+.pin-input {
+  width: 100%;
+  font-size: 1.6rem;
+  letter-spacing: 0.4em;
+  text-align: center;
+  padding: 10px 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+  color: var(--ink);
+}
+.pin-input.err {
+  border-color: var(--chili);
+}
+.pin-err {
+  color: var(--chili);
+  font-size: 0.86rem;
+  margin-top: 8px;
+}
+.pin-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+.pin-btn {
+  flex: 1;
+  padding: 11px 12px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 1.5px solid var(--line);
+  cursor: pointer;
+}
+.pin-btn.ghost {
+  background: var(--paper);
+  color: var(--ink-soft);
+}
+.pin-btn.primary {
+  background: var(--chili);
+  border-color: var(--chili);
+  color: #fff;
+}
+.pin-btn.primary:active {
+  background: var(--chili-deep);
+}
