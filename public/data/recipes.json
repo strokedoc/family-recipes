@@ -54,17 +54,20 @@
       ]
     },
     "moong-sprouts": {
-      "name": "Moong sprouts (raw)",
+      "name": "Moong sprouts (home, short sprout)",
       "per100g": {
-        "kcal": 30,
-        "protein": 3,
-        "carbs": 5.9,
-        "fat": 0.2,
-        "fiber": 1.8
+        "kcal": 158,
+        "protein": 10.9,
+        "carbs": 28.6,
+        "fat": 0.5,
+        "fiber": 7.3
       },
       "tags": [
-        "legume"
-      ]
+        "legume",
+        "sprout",
+        "protein-anchor"
+      ],
+      "note": "home short-sprout (~2.2x dry weight); weigh sprouted. Store-bought long moong sprouts are far lighter (~30 kcal/100g)"
     },
     "besan": {
       "name": "Besan (gram flour)",
@@ -1198,6 +1201,38 @@
       "tags": [
         "fat"
       ]
+    },
+    "moth-sprouts": {
+      "name": "Matki / moth bean sprouts (home)",
+      "per100g": {
+        "kcal": 156,
+        "protein": 10.4,
+        "carbs": 28,
+        "fat": 0.7,
+        "fiber": 3.6
+      },
+      "tags": [
+        "legume",
+        "sprout",
+        "protein-anchor"
+      ],
+      "note": "home short-sprout (~2.2x dry weight); weigh sprouted. Store-bought long moong sprouts are far lighter (~30 kcal/100g)"
+    },
+    "chana-sprouts": {
+      "name": "Kala chana sprouts (home)",
+      "per100g": {
+        "kcal": 165,
+        "protein": 9.1,
+        "carbs": 27.7,
+        "fat": 2.7,
+        "fiber": 7.7
+      },
+      "tags": [
+        "legume",
+        "sprout",
+        "protein-anchor"
+      ],
+      "note": "home short-sprout (~2.2x dry weight); weigh sprouted. Store-bought long moong sprouts are far lighter (~30 kcal/100g)"
     }
   },
   "recipes": [
