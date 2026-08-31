@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Browse from './views/Browse.jsx'
+import Schedule from './views/Schedule.jsx'
+import Grocery from './views/Grocery.jsx'
 import Recipe from './views/Recipe.jsx'
 import RecipeEdit from './views/RecipeEdit.jsx'
 import Library from './views/Library.jsx'
@@ -159,12 +161,14 @@ export default function App() {
     return (
       <div className="app">
         <div className="loading">
-          <span className="loading-mark">રસોઈ</span>
+          <span className="loading-mark">V's Kitchen</span>
           <span>Warming up…</span>
         </div>
       </div>
     )
   }
+
+  const TOP_VIEWS = ['browse', 'schedule', 'grocery']
 
   return (
     <div className="app">
@@ -175,10 +179,35 @@ export default function App() {
         pending={pending}
         onRetry={tryFlush}
       />
+      {TOP_VIEWS.includes(nav.view) && (
+        <nav className="main-tabs">
+          {TOP_VIEWS.map((v) => (
+            <button
+              key={v}
+              className={`main-tab ${nav.view === v ? 'active' : ''}`}
+              onClick={() => setNav({ view: v })}
+            >
+              {{ browse: 'Recipes', schedule: 'Schedule', grocery: 'Grocery' }[v]}
+            </button>
+          ))}
+        </nav>
+      )}
       <main className="main">
         {nav.view === 'browse' && (
-          <Browse data={data} openRecipe={(id) => setNav({ view: 'recipe', id })} setNav={setNav} />
+          <Browse
+            data={data}
+            openRecipe={(id) => setNav({ view: 'recipe', id, from: 'browse' })}
+            setNav={setNav}
+          />
         )}
+        {nav.view === 'schedule' && (
+          <Schedule
+            data={data}
+            commit={commit}
+            openRecipe={(id) => setNav({ view: 'recipe', id, from: 'schedule' })}
+          />
+        )}
+        {nav.view === 'grocery' && <Grocery data={data} commit={commit} />}
         {nav.view === 'recipe' && recipe && (
           <Recipe
             recipe={recipe}
@@ -186,8 +215,8 @@ export default function App() {
             profiles={profiles}
             commit={commit}
             showToast={showToast}
-            onEdit={() => setNav({ view: 'edit', id: recipe.id })}
-            onBack={() => setNav({ view: 'browse' })}
+            onEdit={() => setNav({ view: 'edit', id: recipe.id, from: nav.from })}
+            onBack={() => setNav({ view: nav.from || 'browse' })}
           />
         )}
         {nav.view === 'edit' && recipe && (
@@ -197,8 +226,8 @@ export default function App() {
             data={data}
             commit={commit}
             showToast={showToast}
-            onDone={(id) => setNav({ view: 'recipe', id })}
-            onDeleted={() => setNav({ view: 'browse' })}
+            onDone={(id) => setNav({ view: 'recipe', id, from: nav.from })}
+            onDeleted={() => setNav({ view: nav.from || 'browse' })}
           />
         )}
         {nav.view === 'new' && (
@@ -243,8 +272,8 @@ function Header({ nav, setNav, sync, pending, onRetry }) {
   return (
     <header className="header">
       <button className="brand" onClick={() => setNav({ view: 'browse' })}>
-        <span className="brand-mark">રસોઈ</span>
-        <span className="brand-name">Rasoi</span>
+        <span className="brand-mark">V's</span>
+        <span className="brand-name">Kitchen</span>
       </button>
       <div className="header-right">
         <button

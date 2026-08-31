@@ -1,4 +1,4 @@
-/* ── Rasoi: masala-dabba palette ─────────────────────────────
+/* ── V's Kitchen: masala-dabba palette ───────────────────────
    Cream paper, turmeric, chili maroon, methi green.
    One bright theme: this app is used standing in a lit kitchen. */
 
@@ -176,6 +176,29 @@ textarea:focus {
 .icon-btn.active {
   background: var(--turmeric-soft);
   color: var(--chili);
+}
+
+/* ── main tabs ── */
+.main-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 0 16px 10px;
+}
+.main-tab {
+  flex: 1;
+  text-align: center;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 10px 8px;
+  border-radius: 999px;
+  color: var(--ink-soft);
+  border: 1.5px solid var(--line);
+  background: var(--card);
+}
+.main-tab.active {
+  background: var(--chili);
+  border-color: var(--chili);
+  color: #fff6e9;
 }
 
 /* ── browse ── */
@@ -748,6 +771,156 @@ textarea:focus {
   display: flex;
   gap: 10px;
   margin-top: 12px;
+}
+
+/* ── schedule / grocery: shared week nav ── */
+.week-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.week-label-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.week-label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 18px;
+}
+.today-btn {
+  font-size: 11px;
+  padding: 0;
+}
+
+/* ── schedule ── */
+.day-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 24px;
+}
+.day-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 12px 14px;
+}
+.day-card.today {
+  border-left: 5px solid var(--turmeric);
+}
+.day-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.day-weekday {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16px;
+}
+.day-date {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+.meal-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.meal-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.meal-label {
+  flex-shrink: 0;
+  width: 68px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.meal-slot {
+  flex: 1;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 9px 12px;
+  border-radius: 10px;
+}
+.meal-slot.filled {
+  background: var(--methi-soft);
+  color: var(--methi);
+}
+.meal-slot.empty {
+  background: var(--paper-deep);
+  color: var(--ink-soft);
+  border: 1px dashed var(--line);
+}
+.meal-clear {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+/* ── grocery ── */
+.grocery-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 16px;
+}
+.grocery-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 4px;
+  border-bottom: 1px dashed var(--line);
+}
+.grocery-check {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.grocery-check input[type='checkbox'] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--methi);
+  flex-shrink: 0;
+}
+.grocery-name {
+  font-weight: 600;
+}
+.grocery-item.checked .grocery-name {
+  text-decoration: line-through;
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+.grocery-grams {
+  flex-shrink: 0;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+.add-extra-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.add-extra-input {
+  flex: 1;
 }
 
 /* ── misc ── */

@@ -1,4 +1,4 @@
-# Rasoi — family recipe PWA
+# V's Kitchen — family recipe PWA
 
 Recipe database and portioning reference for a two-person household on a protein-forward
 vegetarian plan. Logging lives in Cronometer; this app answers "what should we cook, and

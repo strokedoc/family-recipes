@@ -1,6 +1,6 @@
-// Rasoi service worker: offline-first app shell, network-first data.
+// V's Kitchen service worker: offline-first app shell, network-first data.
 // Bump VERSION to invalidate old caches on deploy.
-const VERSION = 'rasoi-v1'
+const VERSION = 'vs-kitchen-v1'
 
 self.addEventListener('install', (e) => {
   // Precache the shell entry so offline reload works even if the runtime

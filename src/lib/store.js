@@ -60,6 +60,16 @@ export function applyOp(data, op) {
     // Safety net at apply time too: never orphan a recipe reference.
     const used = next.recipes.some((r) => r.ingredients.some((i) => i.ref === op.key))
     if (!used) delete next.ingredients[op.key]
+  } else if (op.type === 'setMeal') {
+    next.schedule = { ...(data.schedule || {}) }
+    const day = { ...(next.schedule[op.date] || {}) }
+    if (op.recipeId) day[op.meal] = op.recipeId
+    else delete day[op.meal]
+    if (Object.keys(day).length) next.schedule[op.date] = day
+    else delete next.schedule[op.date]
+  } else if (op.type === 'setGroceryList') {
+    next.groceryLists = { ...(data.groceryLists || {}) }
+    next.groceryLists[op.week] = op.state
   }
   return next
 }
@@ -69,6 +79,8 @@ export function opMessage(op) {
   if (op.type === 'deleteRecipe') return `Delete ${op.id} via app`
   if (op.type === 'putIngredient') return `Update ingredient ${op.key} via app`
   if (op.type === 'deleteIngredient') return `Delete ingredient ${op.key} via app`
+  if (op.type === 'setMeal') return `Update schedule ${op.date} via app`
+  if (op.type === 'setGroceryList') return `Update grocery list ${op.week} via app`
   return 'Update recipes via app'
 }
 
