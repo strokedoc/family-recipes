@@ -1039,3 +1039,105 @@ textarea:focus {
 .pin-btn.primary:active {
   background: var(--chili-deep);
 }
+
+/* ── schedule: plan bar, move, batch picker ── */
+.plan-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.autofill-btn {
+  flex: 1;
+  padding: 11px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  background: var(--turmeric-soft);
+  color: var(--chili-deep);
+  border: 1.5px solid var(--turmeric);
+}
+.autofill-btn:active {
+  background: var(--turmeric);
+}
+.meal-move {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+
+.picker-check {
+  flex-shrink: 0;
+  font-size: 18px;
+  color: var(--methi);
+  margin-right: 2px;
+}
+.picker-row.sel {
+  background: var(--methi-soft);
+}
+.sheet-note {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin: 0 0 8px;
+}
+.sheet-title {
+  flex: 1;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16px;
+}
+.sheet-foot {
+  display: flex;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  margin-top: 4px;
+}
+
+.move-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+}
+.move-day {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.move-day-label {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+.move-slots {
+  display: flex;
+  gap: 6px;
+}
+.move-slot {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  font-weight: 700;
+  font-size: 13px;
+  background: var(--paper-deep);
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+}
+.move-slot.occ {
+  background: var(--methi-soft);
+  color: var(--methi);
+}
+.move-slot.here {
+  background: var(--turmeric);
+  color: #fff;
+  border-color: var(--turmeric);
+  opacity: 1;
+}
+.move-slot:disabled {
+  opacity: 1;
+}

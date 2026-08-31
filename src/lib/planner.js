@@ -60,6 +60,52 @@ export function isToday(iso) {
   return iso === toISODate(new Date())
 }
 
+// Fisher–Yates shuffle (returns a new array).
+function shuffle(arr) {
+  const a = arr.slice()
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
+// Meal slots each recipe category is a natural fit for.
+const CATEGORY_MEALS = {
+  breakfast: ['breakfast'],
+  'lunch-dinner': ['lunch', 'dinner'],
+  snack: ['snack'],
+  dessert: ['snack'],
+}
+
+// Randomly drop recipeIds into EMPTY meal slots of the given week, preferring
+// slots that match each recipe's category, then falling back to any empty slot.
+// Existing entries are never overwritten. Returns { ops, placed, skipped }.
+export function autoFillWeek(data, weekStart, recipeIds) {
+  const schedule = data.schedule || {}
+  const emptyByMeal = Object.fromEntries(MEALS.map((m) => [m, []]))
+  for (const date of weekDates(weekStart)) {
+    const day = schedule[date] || {}
+    for (const meal of MEALS) if (!day[meal]) emptyByMeal[meal].push({ date, meal })
+  }
+  for (const meal of MEALS) emptyByMeal[meal] = shuffle(emptyByMeal[meal])
+  const anyEmpty = shuffle(MEALS.flatMap((m) => emptyByMeal[m]))
+
+  const taken = new Set()
+  const free = (s) => s && !taken.has(`${s.date}|${s.meal}`)
+  const ops = []
+  for (const id of shuffle(recipeIds)) {
+    const recipe = data.recipes.find((r) => r.id === id)
+    const prefer = CATEGORY_MEALS[recipe?.category] || []
+    const slot =
+      prefer.flatMap((m) => emptyByMeal[m]).find(free) || anyEmpty.find(free)
+    if (!slot) break
+    taken.add(`${slot.date}|${slot.meal}`)
+    ops.push({ date: slot.date, meal: slot.meal, recipeId: id })
+  }
+  return { ops, placed: ops.length, skipped: recipeIds.length - ops.length }
+}
+
 // Aggregate grams of every "fresh" ingredient across all recipes scheduled in
 // the given week, merged with that week's manual check-offs and extra items.
 // A recipe scheduled for a meal is assumed cooked once, whole batch — its

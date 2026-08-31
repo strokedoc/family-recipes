@@ -211,6 +211,7 @@ export default function App() {
           <Schedule
             data={data}
             commit={commit}
+            showToast={showToast}
             openRecipe={(id) => setNav({ view: 'recipe', id, from: 'schedule' })}
           />
         )}
