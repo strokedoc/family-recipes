@@ -1,4 +1,4 @@
-# Setting up Rasoi on your phones
+# Setting up V's Kitchen on your phones
 
 One-time setup, about 20 minutes. No coding involved. You'll do steps 1–3 once on a
 computer, then step 4 on each phone.
@@ -36,7 +36,7 @@ Each of you does this on your **own** GitHub account, so the app's edits are lab
 with who made them:
 
 1. Go to https://github.com/settings/personal-access-tokens/new
-2. Token name: `rasoi-phone`. Expiration: **1 year** (put a calendar reminder to renew).
+2. Token name: `vs-kitchen-phone`. Expiration: **1 year** (put a calendar reminder to renew).
 3. Under **Repository access** choose **Only select repositories** → pick `family-recipes`.
    (For the collaborator: the repo appears once you've accepted the invite.)
 4. Under **Permissions → Repository permissions**, find **Contents** and set it to
@@ -47,7 +47,7 @@ with who made them:
 ## 4. Install on each iPhone
 
 1. Open `https://YOUR-USERNAME.github.io/family-recipes/` in **Safari**.
-2. Tap the **Share** button → **Add to Home Screen** → Add. A "Rasoi" icon appears.
+2. Tap the **Share** button → **Add to Home Screen** → Add. A "V's Kitchen" icon appears.
 3. Open the app from the home screen, tap **⚙︎ Settings**:
    - Repository: `YOUR-USERNAME/family-recipes` (the owner's username, on both phones)
    - Token: paste your own token from step 3

@@ -159,7 +159,7 @@ export default function App() {
     return (
       <div className="app">
         <div className="loading">
-          <span className="loading-mark">રસોઈ</span>
+          <span className="loading-mark">V's Kitchen</span>
           <span>Warming up…</span>
         </div>
       </div>
@@ -243,8 +243,8 @@ function Header({ nav, setNav, sync, pending, onRetry }) {
   return (
     <header className="header">
       <button className="brand" onClick={() => setNav({ view: 'browse' })}>
-        <span className="brand-mark">રસોઈ</span>
-        <span className="brand-name">Rasoi</span>
+        <span className="brand-mark">V's</span>
+        <span className="brand-name">Kitchen</span>
       </button>
       <div className="header-right">
         <button
