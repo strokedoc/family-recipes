@@ -17,7 +17,7 @@
     {
       "id": "vruddhi",
       "name": "V",
-      "dailyTargets": { "kcal": 1500, "protein": 120, "fat": 50, "netCarbs": 135 },
+      "dailyTargets": { "kcal": 1500, "protein": 128, "fat": 50, "netCarbs": 135 },
       "mealBudgets": {
         "breakfast": { "kcal": 300, "protein": 27 },
         "lunch": { "kcal": 550, "protein": 33 },

@@ -1566,6 +1566,126 @@
         "protein-anchor"
       ],
       "note": "Cooked whole moth beans (matki), not home sprouts — see [[moth-sprouts]] for the sprouted version."
+    },
+    "cinnamon": {
+      "name": "Cinnamon, ground",
+      "per100g": {
+        "kcal": 247,
+        "protein": 4,
+        "carbs": 81,
+        "fat": 1.2,
+        "fiber": 53
+      },
+      "tags": [
+        "flavor"
+      ]
+    },
+    "cottage-cheese": {
+      "name": "Cottage cheese, low-fat",
+      "per100g": {
+        "kcal": 84,
+        "protein": 11,
+        "carbs": 4.3,
+        "fat": 2.3,
+        "fiber": 0
+      },
+      "tags": [
+        "dairy",
+        "protein-anchor"
+      ]
+    },
+    "tofu-super-firm": {
+      "name": "Tofu, super-firm (e.g. Nasoya organic)",
+      "per100g": {
+        "kcal": 118,
+        "protein": 14,
+        "carbs": 2.4,
+        "fat": 6,
+        "fiber": 1
+      },
+      "tags": [
+        "protein-anchor"
+      ]
+    },
+    "enchilada-sauce": {
+      "name": "Red enchilada sauce (e.g. Old El Paso)",
+      "per100g": {
+        "kcal": 42,
+        "protein": 0.8,
+        "carbs": 6.7,
+        "fat": 1.7,
+        "fiber": 1
+      },
+      "tags": [
+        "sauce",
+        "flavor"
+      ]
+    },
+    "taco-seasoning": {
+      "name": "Taco seasoning mix (e.g. Old El Paso)",
+      "per100g": {
+        "kcal": 300,
+        "protein": 4,
+        "carbs": 60,
+        "fat": 3,
+        "fiber": 8
+      },
+      "tags": [
+        "flavor"
+      ]
+    },
+    "refried-beans": {
+      "name": "Refried beans, canned",
+      "per100g": {
+        "kcal": 92,
+        "protein": 5.4,
+        "carbs": 15.4,
+        "fat": 1.2,
+        "fiber": 5.4
+      },
+      "tags": [
+        "protein-anchor"
+      ]
+    },
+    "tortilla-almond-flour": {
+      "name": "Almond flour tortilla (e.g. Siete grain-free)",
+      "per100g": {
+        "kcal": 300,
+        "protein": 10,
+        "carbs": 26.7,
+        "fat": 23.3,
+        "fiber": 10
+      },
+      "tags": [
+        "grain"
+      ]
+    },
+    "cheese-mexican-shredded": {
+      "name": "Mexican blend shredded cheese (e.g. Sargento 4-cheese)",
+      "per100g": {
+        "kcal": 393,
+        "protein": 21.4,
+        "carbs": 3.6,
+        "fat": 32.1,
+        "fiber": 0
+      },
+      "tags": [
+        "dairy"
+      ]
+    },
+    "avocado": {
+      "name": "Avocado",
+      "per100g": {
+        "kcal": 160,
+        "protein": 2,
+        "carbs": 8.5,
+        "fat": 14.7,
+        "fiber": 6.7
+      },
+      "tags": [
+        "fruit",
+        "fat"
+      ]
     }
   },
   "recipes": [
@@ -2795,17 +2915,61 @@
       "servings": 2,
       "yieldGramsCooked": null,
       "ingredients": [
-        { "ref": "dragon-fruit-blend", "grams": 227, "note": "1 bag" },
-        { "ref": "fage-0", "grams": 245, "note": "1 cup" },
-        { "ref": "almond-milk-unsweetened", "grams": 240, "note": "1 cup" },
-        { "ref": "almond-butter", "grams": 39, "note": "2.5 tbsp" },
-        { "ref": "banana", "grams": 136, "note": "1 large" },
-        { "ref": "dates", "grams": 21, "note": "3 dried" },
-        { "ref": "chia", "grams": 10, "note": "1 tbsp" },
-        { "ref": "hemp-hearts", "grams": 10, "note": "1 tbsp" },
-        { "ref": "walnuts", "grams": 6, "note": "1 tbsp" },
-        { "ref": "sunflower-seeds", "grams": 9, "note": "1 tbsp" },
-        { "ref": "coconut-fresh", "grams": 20, "note": "1 tbsp" }
+        {
+          "ref": "dragon-fruit-blend",
+          "grams": 227,
+          "note": "1 bag"
+        },
+        {
+          "ref": "fage-0",
+          "grams": 245,
+          "note": "1 cup"
+        },
+        {
+          "ref": "almond-milk-unsweetened",
+          "grams": 240,
+          "note": "1 cup"
+        },
+        {
+          "ref": "almond-butter",
+          "grams": 39,
+          "note": "2.5 tbsp"
+        },
+        {
+          "ref": "banana",
+          "grams": 136,
+          "note": "1 large"
+        },
+        {
+          "ref": "dates",
+          "grams": 21,
+          "note": "3 dried"
+        },
+        {
+          "ref": "chia",
+          "grams": 10,
+          "note": "1 tbsp"
+        },
+        {
+          "ref": "hemp-hearts",
+          "grams": 10,
+          "note": "1 tbsp"
+        },
+        {
+          "ref": "walnuts",
+          "grams": 6,
+          "note": "1 tbsp"
+        },
+        {
+          "ref": "sunflower-seeds",
+          "grams": 9,
+          "note": "1 tbsp"
+        },
+        {
+          "ref": "coconut-fresh",
+          "grams": 20,
+          "note": "1 tbsp"
+        }
       ],
       "steps": [
         "Blend everything with ice/water to taste.",
@@ -2827,16 +2991,56 @@
       "servings": 1,
       "yieldGramsCooked": null,
       "ingredients": [
-        { "ref": "dragon-fruit-blend", "grams": 113, "note": "1/2 bag" },
-        { "ref": "fage-0", "grams": 122, "note": "1/2 cup" },
-        { "ref": "almond-milk-unsweetened", "grams": 120, "note": "1/2 cup" },
-        { "ref": "strawberries", "grams": 24, "note": "2 medium" },
-        { "ref": "chia", "grams": 5, "note": "1/2 tbsp" },
-        { "ref": "hemp-hearts", "grams": 5, "note": "1/2 tbsp" },
-        { "ref": "nut-seed-butter", "grams": 8, "note": "~1/2 tbsp NuttZo" },
-        { "ref": "whey-levels", "grams": 32, "note": "1 scoop" },
-        { "ref": "creatine", "grams": 5, "note": "1 scoop — non-caloric" },
-        { "ref": "cocoa", "grams": 5, "note": "1 tbsp cacao powder" }
+        {
+          "ref": "dragon-fruit-blend",
+          "grams": 113,
+          "note": "1/2 bag"
+        },
+        {
+          "ref": "fage-0",
+          "grams": 122,
+          "note": "1/2 cup"
+        },
+        {
+          "ref": "almond-milk-unsweetened",
+          "grams": 120,
+          "note": "1/2 cup"
+        },
+        {
+          "ref": "strawberries",
+          "grams": 24,
+          "note": "2 medium"
+        },
+        {
+          "ref": "chia",
+          "grams": 5,
+          "note": "1/2 tbsp"
+        },
+        {
+          "ref": "hemp-hearts",
+          "grams": 5,
+          "note": "1/2 tbsp"
+        },
+        {
+          "ref": "nut-seed-butter",
+          "grams": 8,
+          "note": "~1/2 tbsp NuttZo"
+        },
+        {
+          "ref": "whey-levels",
+          "grams": 32,
+          "note": "1 scoop"
+        },
+        {
+          "ref": "creatine",
+          "grams": 5,
+          "note": "1 scoop — non-caloric"
+        },
+        {
+          "ref": "cocoa",
+          "grams": 5,
+          "note": "1 tbsp cacao powder"
+        }
       ],
       "steps": [
         "Blend everything with ice/water.",
@@ -2859,17 +3063,60 @@
       "servings": 9,
       "yieldGramsCooked": null,
       "ingredients": [
-        { "ref": "besan", "grams": 69, "note": "3/4 cup" },
-        { "ref": "atta", "grams": 46, "note": "3/8 cup whole wheat" },
-        { "ref": "tofu-firm", "grams": 126, "note": "1/2 cup, extra-firm, grated in" },
-        { "ref": "fage-0", "grams": 31, "note": "2 tbsp, in the dough" },
-        { "ref": "ginger", "grams": 20, "note": "1 tbsp" },
-        { "ref": "garlic", "grams": 9, "note": "1 tbsp chopped" },
-        { "ref": "green-chili", "grams": 9, "note": "1 tbsp chopped" },
-        { "ref": "ajwain", "grams": 5 },
-        { "ref": "turmeric", "grams": 2, "note": "1/2 tsp" },
-        { "ref": "asafoetida", "grams": 2, "note": "pinch of hing" },
-        { "ref": "monk-fruit-sweetener", "grams": 36, "note": "3 tbsp allulose blend" }
+        {
+          "ref": "besan",
+          "grams": 69,
+          "note": "3/4 cup"
+        },
+        {
+          "ref": "atta",
+          "grams": 46,
+          "note": "3/8 cup whole wheat"
+        },
+        {
+          "ref": "tofu-firm",
+          "grams": 126,
+          "note": "1/2 cup, extra-firm, grated in"
+        },
+        {
+          "ref": "fage-0",
+          "grams": 31,
+          "note": "2 tbsp, in the dough"
+        },
+        {
+          "ref": "ginger",
+          "grams": 20,
+          "note": "1 tbsp"
+        },
+        {
+          "ref": "garlic",
+          "grams": 9,
+          "note": "1 tbsp chopped"
+        },
+        {
+          "ref": "green-chili",
+          "grams": 9,
+          "note": "1 tbsp chopped"
+        },
+        {
+          "ref": "ajwain",
+          "grams": 5
+        },
+        {
+          "ref": "turmeric",
+          "grams": 2,
+          "note": "1/2 tsp"
+        },
+        {
+          "ref": "asafoetida",
+          "grams": 2,
+          "note": "pinch of hing"
+        },
+        {
+          "ref": "monk-fruit-sweetener",
+          "grams": 36,
+          "note": "3 tbsp allulose blend"
+        }
       ],
       "steps": [
         "Knead besan, wheat flour, grated tofu, Fage, ginger-garlic-chilli, ajwain, turmeric, hing, sweetener into a soft dough.",
@@ -2892,11 +3139,29 @@
       "servings": 5,
       "yieldGramsCooked": null,
       "ingredients": [
-        { "ref": "jowar-flour", "grams": 240 },
-        { "ref": "barley-flour", "grams": 74, "note": "1/2 cup" },
-        { "ref": "flax-seeds", "grams": 10, "note": "ground" },
-        { "ref": "psyllium-husk", "grams": 15 },
-        { "ref": "ghee", "grams": 26, "note": "6 tsp, in dough / on top" }
+        {
+          "ref": "jowar-flour",
+          "grams": 240
+        },
+        {
+          "ref": "barley-flour",
+          "grams": 74,
+          "note": "1/2 cup"
+        },
+        {
+          "ref": "flax-seeds",
+          "grams": 10,
+          "note": "ground"
+        },
+        {
+          "ref": "psyllium-husk",
+          "grams": 15
+        },
+        {
+          "ref": "ghee",
+          "grams": 26,
+          "note": "6 tsp, in dough / on top"
+        }
       ],
       "steps": [
         "Mix jowar flour, barley flour, flax meal and psyllium; bind with hot water into a dough.",
@@ -2919,9 +3184,21 @@
       "servings": 1,
       "yieldGramsCooked": null,
       "ingredients": [
-        { "ref": "milk-2pct", "grams": 244, "note": "1 cup" },
-        { "ref": "whey-levels", "grams": 32, "note": "1 scoop vanilla" },
-        { "ref": "strawberries", "grams": 48, "note": "4 medium" }
+        {
+          "ref": "milk-2pct",
+          "grams": 244,
+          "note": "1 cup"
+        },
+        {
+          "ref": "whey-levels",
+          "grams": 32,
+          "note": "1 scoop vanilla"
+        },
+        {
+          "ref": "strawberries",
+          "grams": 48,
+          "note": "4 medium"
+        }
       ],
       "steps": [
         "Blend milk, whey and strawberries with ice."
@@ -2943,10 +3220,26 @@
       "servings": 1,
       "yieldGramsCooked": null,
       "ingredients": [
-        { "ref": "fage-0", "grams": 122, "note": "1/2 cup, whisked thin with water" },
-        { "ref": "salt", "grams": 1, "note": "a dash" },
-        { "ref": "lemon-juice", "grams": 6, "note": "1 wedge" },
-        { "ref": "cumin", "grams": 1, "note": "1/2 tsp roasted, ground" }
+        {
+          "ref": "fage-0",
+          "grams": 122,
+          "note": "1/2 cup, whisked thin with water"
+        },
+        {
+          "ref": "salt",
+          "grams": 1,
+          "note": "a dash"
+        },
+        {
+          "ref": "lemon-juice",
+          "grams": 6,
+          "note": "1 wedge"
+        },
+        {
+          "ref": "cumin",
+          "grams": 1,
+          "note": "1/2 tsp roasted, ground"
+        }
       ],
       "steps": [
         "Whisk Fage 0% with cold water to a drinkable consistency.",
@@ -2969,8 +3262,16 @@
       "servings": 4,
       "yieldGramsCooked": null,
       "ingredients": [
-        { "ref": "mothbean-cooked", "grams": 265, "note": "1.5 cup cooked" },
-        { "ref": "oil", "grams": 14, "note": "1 tbsp peanut oil, tempering" }
+        {
+          "ref": "mothbean-cooked",
+          "grams": 265,
+          "note": "1.5 cup cooked"
+        },
+        {
+          "ref": "oil",
+          "grams": 14,
+          "note": "1 tbsp peanut oil, tempering"
+        }
       ],
       "steps": [
         "Temper the cooked moth beans in peanut oil with mustard seeds, hing, curry leaves, salt and lime.",
@@ -2992,15 +3293,51 @@
       "servings": 4,
       "yieldGramsCooked": null,
       "ingredients": [
-        { "ref": "amaranth-leaves", "grams": 112, "note": "4 cups chopped" },
-        { "ref": "potato", "grams": 125, "note": "1 small, cubed" },
-        { "ref": "onion", "grams": 331, "note": "1 large sweet onion" },
-        { "ref": "fenugreek-seed", "grams": 22, "note": "2 tbsp methi dana" },
-        { "ref": "oil", "grams": 41, "note": "3 tbsp avocado oil" },
-        { "ref": "salt", "grams": 18, "note": "1 tbsp" },
-        { "ref": "chili-powder", "grams": 16, "note": "2 tbsp" },
-        { "ref": "cumin", "grams": 6, "note": "1 tbsp seed" },
-        { "ref": "turmeric", "grams": 9, "note": "1 tbsp" }
+        {
+          "ref": "amaranth-leaves",
+          "grams": 112,
+          "note": "4 cups chopped"
+        },
+        {
+          "ref": "potato",
+          "grams": 125,
+          "note": "1 small, cubed"
+        },
+        {
+          "ref": "onion",
+          "grams": 331,
+          "note": "1 large sweet onion"
+        },
+        {
+          "ref": "fenugreek-seed",
+          "grams": 22,
+          "note": "2 tbsp methi dana"
+        },
+        {
+          "ref": "oil",
+          "grams": 41,
+          "note": "3 tbsp avocado oil"
+        },
+        {
+          "ref": "salt",
+          "grams": 18,
+          "note": "1 tbsp"
+        },
+        {
+          "ref": "chili-powder",
+          "grams": 16,
+          "note": "2 tbsp"
+        },
+        {
+          "ref": "cumin",
+          "grams": 6,
+          "note": "1 tbsp seed"
+        },
+        {
+          "ref": "turmeric",
+          "grams": 9,
+          "note": "1 tbsp"
+        }
       ],
       "steps": [
         "Temper cumin and methi seeds in oil; add onion and cook down.",
@@ -3015,6 +3352,395 @@
       "notes": "Imported from Cronometer recipe #81120118. Per serving ≈ 192 kcal / 4 g protein / 6 g fiber. Salt and chilli powder are heavy in this one — sodium ~1980 mg/serving.",
       "source": "cronometer-import-2026-08-31",
       "updatedAt": "2026-08-31T00:00:00Z"
+    },
+    {
+      "id": "protein-smoothie-dragonfruit",
+      "name": "Protein smoothie — dragonfruit",
+      "category": "breakfast",
+      "servings": 1,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        {
+          "ref": "dragon-fruit-blend",
+          "grams": 105,
+          "note": "~1/2 bag (Dole)"
+        },
+        {
+          "ref": "fage-0",
+          "grams": 200,
+          "note": "~1 cup, 0%"
+        },
+        {
+          "ref": "almond-milk-unsweetened",
+          "grams": 150,
+          "note": "2/3 cup"
+        },
+        {
+          "ref": "whey-levels",
+          "grams": 21,
+          "note": "~2/3 scoop"
+        },
+        {
+          "ref": "almond-butter",
+          "grams": 10,
+          "note": "~2 tsp"
+        },
+        {
+          "ref": "chia",
+          "grams": 14,
+          "note": "1 heaped tbsp"
+        },
+        {
+          "ref": "hemp-hearts",
+          "grams": 5,
+          "note": "1/2 tbsp"
+        },
+        {
+          "ref": "flax-seeds",
+          "grams": 3,
+          "note": "1 tsp, ground"
+        },
+        {
+          "ref": "creatine",
+          "grams": 5,
+          "note": "1 scoop — non-caloric"
+        }
+      ],
+      "steps": [
+        "Blend everything smooth with a few ice cubes and a splash of water.",
+        "The dragonfruit variant of the daily smoothie — no cocoa, almond butter in place of NuttZo, a little more yogurt."
+      ],
+      "tags": [
+        "no-cook",
+        "high-protein",
+        "daily-constant",
+        "post-workout"
+      ],
+      "notes": "Imported from Cronometer recipe #81410067 (logged 2026-09-02). Full recipe = 1 serving ≈ 466 kcal / 44 g protein / 32 g carbs / 17 g fat / 9 g fiber. Ingredient list reconstructed to hit those totals (±10%); calibrate against Cronometer over time.",
+      "source": "cronometer-import-2026-09-02",
+      "updatedAt": "2026-09-02T00:00:00Z"
+    },
+    {
+      "id": "apple-cinnamon-yogurt-bowl",
+      "name": "Apple cinnamon yogurt bowl",
+      "category": "breakfast",
+      "servings": 1,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        {
+          "ref": "fage-0",
+          "grams": 185,
+          "note": "3/4 cup, organic 0%"
+        },
+        {
+          "ref": "apple",
+          "grams": 235,
+          "note": "1 large, diced"
+        },
+        {
+          "ref": "dates",
+          "grams": 10,
+          "note": "1–2, chopped"
+        },
+        {
+          "ref": "chia",
+          "grams": 9,
+          "note": "1 tbsp"
+        },
+        {
+          "ref": "almonds",
+          "grams": 5,
+          "note": "1 tbsp, slivered"
+        },
+        {
+          "ref": "cinnamon",
+          "grams": 3,
+          "note": "1 tsp"
+        }
+      ],
+      "steps": [
+        "Dice the apple and toss with the cinnamon.",
+        "Spoon over the yogurt; top with chia, chopped dates and almonds.",
+        "No cook — about 3 minutes."
+      ],
+      "tags": [
+        "no-cook",
+        "quick",
+        "high-protein",
+        "high-fiber"
+      ],
+      "notes": "Imported from Cronometer recipe #81420429 (logged 2026-09-02). One bowl ≈ 323 kcal / 21 g protein / 58 g carbs / 7 g fat / 10 g fiber. Apple and date amounts are the main estimate; adjust to taste.",
+      "source": "cronometer-import-2026-09-02",
+      "updatedAt": "2026-09-02T00:00:00Z"
+    },
+    {
+      "id": "cottage-cheese-toast",
+      "name": "Cottage cheese toast",
+      "category": "breakfast",
+      "servings": 2,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        {
+          "ref": "bread-whole-wheat",
+          "grams": 108,
+          "note": "~2 thick slices, toasted"
+        },
+        {
+          "ref": "cottage-cheese",
+          "grams": 130,
+          "note": "~1/2 cup, spread thick"
+        },
+        {
+          "ref": "oil",
+          "grams": 14,
+          "note": "~1 tbsp olive, drizzled"
+        },
+        {
+          "ref": "tomato",
+          "grams": 70,
+          "note": "sliced, on top"
+        },
+        {
+          "ref": "pumpkin-seeds",
+          "grams": 6,
+          "note": "1 tbsp"
+        },
+        {
+          "ref": "flax-seeds",
+          "grams": 12,
+          "note": "1 tbsp, ground"
+        },
+        {
+          "ref": "sesame-seeds",
+          "grams": 5,
+          "note": "everything-bagel-style sprinkle"
+        }
+      ],
+      "steps": [
+        "Toast the bread. Spread cottage cheese thick on each slice.",
+        "Top with tomato, drizzle olive oil, scatter the seed mix, crack of pepper and flaky salt.",
+        "Batch = 2 servings. Heads-up: the seasoning/salt makes this a high-sodium meal (~1500 mg for the batch)."
+      ],
+      "tags": [
+        "no-cook",
+        "quick",
+        "high-protein",
+        "high-fiber"
+      ],
+      "notes": "Imported from Cronometer recipe #81323132 (logged 2026-09-01). Full batch ≈ 617 kcal / 32 g protein / 62 g carbs / 31 g fat / 14 g fiber; per serving ≈ 310 kcal / 16 g protein. Ingredient list reconstructed to match those totals (±10%).",
+      "source": "cronometer-import-2026-09-02",
+      "updatedAt": "2026-09-02T00:00:00Z"
+    },
+    {
+      "id": "lahsooni-palak-paneer-pea-rice",
+      "name": "Lahsooni palak paneer with pea rice",
+      "category": "lunch-dinner",
+      "servings": 3,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        {
+          "ref": "paneer-whole",
+          "grams": 255,
+          "note": "cubed, lightly pan-seared"
+        },
+        {
+          "ref": "spinach",
+          "grams": 350,
+          "note": "blanched and pureed"
+        },
+        {
+          "ref": "garlic",
+          "grams": 33,
+          "note": "~2 tbsp minced — the lahsooni hit"
+        },
+        {
+          "ref": "onion",
+          "grams": 48,
+          "note": "finely chopped"
+        },
+        {
+          "ref": "tomato",
+          "grams": 60,
+          "note": "pureed"
+        },
+        {
+          "ref": "cashews",
+          "grams": 14,
+          "note": "blitzed into the gravy"
+        },
+        {
+          "ref": "fresh-cream",
+          "grams": 40,
+          "note": "2 tbsp, finish"
+        },
+        {
+          "ref": "ghee",
+          "grams": 14,
+          "note": "1 tbsp, tempering"
+        },
+        {
+          "ref": "rice-basmati-dry",
+          "grams": 108,
+          "note": "pea rice: ~1/2 cup dry, cooked"
+        },
+        {
+          "ref": "green-peas",
+          "grams": 156,
+          "note": "pea rice: ~1 cup"
+        },
+        {
+          "ref": "onion",
+          "grams": 40,
+          "note": "pea rice: sauteed"
+        },
+        {
+          "ref": "oil",
+          "grams": 4,
+          "note": "pea rice: tempering"
+        }
+      ],
+      "steps": [
+        "Pea rice: temper cumin in oil, saute onion, add peas and cooked basmati, season, keep warm.",
+        "Palak paneer: brown the garlic in ghee (go heavy — lahsooni), add onion then tomato puree and cashews, cook down.",
+        "Stir in the spinach puree, simmer, fold in paneer, finish with cream.",
+        "Serve the palak paneer over the pea rice — the rice carries the carbs, the paneer the protein. Batch = 3 plates."
+      ],
+      "tags": [
+        "high-protein",
+        "complete-meal",
+        "freezes-well",
+        "gujarati"
+      ],
+      "notes": "Combined from two Cronometer recipes logged 2026-09-01: Lahsooni palak paneer #81345232 (batch ≈ 1180 kcal / 62 g protein / 87 g fat) + Pea rice #81354146 (≈ 254 kcal / 10 g protein / 53 g carbs per portion, 2 portions here). Combined batch ≈ 1760 kcal / 79 g protein / 153 g carbs / 96 g fat / 20 g fiber; per plate ≈ 585 kcal / 26 g protein. Ingredient lists reconstructed to match Cronometer totals (±10%).",
+      "source": "cronometer-import-2026-09-02",
+      "updatedAt": "2026-09-02T00:00:00Z"
+    },
+    {
+      "id": "tofu-enchiladas",
+      "name": "Tofu enchiladas",
+      "category": "lunch-dinner",
+      "servings": 2,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        {
+          "ref": "tofu-super-firm",
+          "grams": 125,
+          "note": "cubed, browned"
+        },
+        {
+          "ref": "tomato",
+          "grams": 150,
+          "note": "2 Roma, diced"
+        },
+        {
+          "ref": "onion",
+          "grams": 160,
+          "note": "1 cup sweet, chopped"
+        },
+        {
+          "ref": "capsicum",
+          "grams": 120,
+          "note": "green/yellow/red mix, strips"
+        },
+        {
+          "ref": "oil",
+          "grams": 14,
+          "note": "1 tbsp EVOO"
+        },
+        {
+          "ref": "enchilada-sauce",
+          "grams": 283,
+          "note": "1 can red"
+        },
+        {
+          "ref": "taco-seasoning",
+          "grams": 22,
+          "note": "3 tbsp"
+        },
+        {
+          "ref": "refried-beans",
+          "grams": 130,
+          "note": "spread in tortillas"
+        },
+        {
+          "ref": "cheese-mexican-shredded",
+          "grams": 40,
+          "note": "shredded, on top"
+        },
+        {
+          "ref": "tortilla-almond-flour",
+          "grams": 120,
+          "note": "4 Siete tortillas"
+        }
+      ],
+      "steps": [
+        "Crumble/cube the super-firm tofu, toss with 1 tbsp taco seasoning, brown in the olive oil.",
+        "Add onion, peppers and tomato; saute until soft. Stir in the rest of the seasoning.",
+        "Spread refried beans down each almond-flour tortilla, fill with the tofu-veg mix, roll and place seam-down in a baking dish.",
+        "Pour over the enchilada sauce, scatter the Mexican cheese, bake ~15 min at 200C until bubbling.",
+        "Batch = 2 servings (2 enchiladas each). Serve with the guacamole."
+      ],
+      "tags": [
+        "high-protein",
+        "mexican",
+        "batch-cook"
+      ],
+      "notes": "Added from Harsh & Vruddhi's dinner 2026-09-02. Batch (2 servings) ≈ 1215 kcal / 53 g protein / 117 g carbs / 70 g fat / 32 g fiber; per serving ≈ 608 kcal / 26 g protein / 58 g carbs / 35 g fat. Branded per-100g values are label estimates — calibrate against Cronometer.",
+      "source": "manual-2026-09-02",
+      "updatedAt": "2026-09-02T00:00:00Z"
+    },
+    {
+      "id": "guacamole",
+      "name": "Guacamole",
+      "category": "snack",
+      "servings": 2,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        {
+          "ref": "avocado",
+          "grams": 150,
+          "note": "~1 large, mashed"
+        },
+        {
+          "ref": "tomato",
+          "grams": 30,
+          "note": "finely diced"
+        },
+        {
+          "ref": "onion",
+          "grams": 25,
+          "note": "2 tbsp sweet, minced"
+        },
+        {
+          "ref": "garlic",
+          "grams": 2,
+          "note": "1 clove, grated"
+        },
+        {
+          "ref": "coriander-leaves",
+          "grams": 12,
+          "note": "chopped"
+        },
+        {
+          "ref": "lemon-juice",
+          "grams": 10,
+          "note": "1/2 lime"
+        }
+      ],
+      "steps": [
+        "Mash the avocado to the texture you like.",
+        "Fold in tomato, onion, garlic, cilantro and the lime juice; salt to taste.",
+        "Batch = 2 servings. Pairs with the tofu enchiladas."
+      ],
+      "tags": [
+        "no-cook",
+        "quick",
+        "mexican",
+        "healthy-fat"
+      ],
+      "notes": "Added from Harsh & Vruddhi's dinner 2026-09-02. Batch (2 servings) ≈ 263 kcal / 4 g protein / 18 g carbs / 22 g fat / 11 g fiber; per serving ≈ 132 kcal / 2 g protein / 9 g carbs / 11 g fat.",
+      "source": "manual-2026-09-02",
+      "updatedAt": "2026-09-02T00:00:00Z"
     }
   ],
   "schedule": {},
