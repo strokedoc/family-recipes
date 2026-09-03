@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { testConnection } from '../lib/github.js'
-import { EDIT_PIN, isUnlocked, lock } from '../lib/editlock.js'
+import { isUnlocked, lock } from '../lib/editlock.js'
 
 export default function Settings({ settings, onSave, onBack }) {
   const [repo, setRepo] = useState(settings.repo || '')
@@ -76,9 +76,9 @@ export default function Settings({ settings, onSave, onBack }) {
 
       <h2 className="detail-subtitle">Editing lock</h2>
       <p className="library-hint">
-        Adding, changing or deleting a recipe or ingredient asks for a PIN (<strong>{EDIT_PIN}</strong>)
-        the first time on each device, then stays unlocked. Meal schedule and grocery list aren't
-        locked. This only guards the app's edit screens — it isn't security.
+        Adding, changing or deleting a recipe or ingredient asks for a PIN the first time on each
+        device, then stays unlocked. Meal schedule and grocery list aren't locked. This only guards
+        the app's edit screens — it isn't security.
       </p>
       <div className={`status ${unlocked ? 'ok' : ''}`}>
         {unlocked ? 'Editing is unlocked on this device.' : 'Editing is locked on this device.'}

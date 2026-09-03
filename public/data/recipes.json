@@ -1713,7 +1713,7 @@
         "protein-anchor",
         "drink"
       ],
-      "note": "1 bottle = 340 g = 150 kcal / 30 g protein. VERIFY against label."
+      "note": "1 bottle = 340 g = 150 kcal / 30 g protein. Confirmed 2026-09-03."
     }
   },
   "recipes": [
@@ -2391,8 +2391,8 @@
       ],
       "notes": "~190 kcal / 29 g protein per serving — a dessert that doubles as the fourth feeding.",
       "source": "seed",
-      "updatedAt": "2026-08-30T00:00:00Z",
-      "role": "dessert"
+      "updatedAt": "2026-09-03T00:00:00Z",
+      "role": "filler"
     },
     {
       "id": "tofu-paratha",
@@ -3781,7 +3781,7 @@
         "high-protein",
         "protein-filler"
       ],
-      "notes": "Afternoon protein filler. ~150 kcal / 30 g protein per bottle. Numbers pencilled from the standard label - verify.",
+      "notes": "Afternoon protein filler. ~150 kcal / 30 g protein per bottle. Label numbers confirmed by Harsh 2026-09-03.",
       "source": "harsh-2026-09-03",
       "updatedAt": "2026-09-03T00:00:00Z",
       "role": "filler"
