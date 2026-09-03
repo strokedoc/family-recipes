@@ -1686,6 +1686,19 @@
         "fruit",
         "fat"
       ]
+    },
+    "dhana-jeeru": {
+      "name": "Dhana jeeru (coriander-cumin powder)",
+      "per100g": {
+        "kcal": 337,
+        "protein": 15,
+        "carbs": 50,
+        "fat": 20,
+        "fiber": 26
+      },
+      "tags": [
+        "spice"
+      ]
     }
   },
   "recipes": [
@@ -3608,6 +3621,107 @@
       "notes": "Added from Harsh & Vruddhi's dinner 2026-09-02. Batch (2 servings) ≈ 263 kcal / 4 g protein / 18 g carbs / 22 g fat / 11 g fiber; per serving ≈ 132 kcal / 2 g protein / 9 g carbs / 11 g fat.",
       "source": "manual-2026-09-02",
       "updatedAt": "2026-09-02T00:00:00Z"
+    },
+    {
+      "id": "moong-dal-chilla",
+      "name": "Moong dal chilla",
+      "category": "breakfast",
+      "servings": 2,
+      "yieldGramsCooked": 725,
+      "ingredients": [
+        {
+          "ref": "moong-dal-dry",
+          "grams": 150,
+          "note": "yellow moong dal flour"
+        },
+        {
+          "ref": "rava-sooji",
+          "grams": 50
+        },
+        {
+          "ref": "psyllium-husk",
+          "grams": 5,
+          "note": "1 tbsp"
+        },
+        {
+          "ref": "ajwain",
+          "grams": 2,
+          "note": "1 tsp carom seeds"
+        },
+        {
+          "ref": "turmeric",
+          "grams": 3,
+          "note": "1 tsp"
+        },
+        {
+          "ref": "dhana-jeeru",
+          "grams": 2.5,
+          "note": "1 tsp"
+        },
+        {
+          "ref": "chili-powder",
+          "grams": 2.5,
+          "note": "1 tsp"
+        },
+        {
+          "ref": "asafoetida",
+          "grams": 0.5,
+          "note": "pinch"
+        },
+        {
+          "ref": "salt",
+          "grams": 9,
+          "note": "1.5 tsp"
+        },
+        {
+          "ref": "monk-fruit-sweetener",
+          "grams": 12,
+          "note": "3 tsp Whole Earth"
+        },
+        {
+          "ref": "tofu-super-firm",
+          "grams": 130,
+          "note": "crumbled"
+        },
+        {
+          "ref": "green-chili",
+          "grams": 10,
+          "note": "1, minced"
+        },
+        {
+          "ref": "tomato",
+          "grams": 45,
+          "note": "1/4 cup"
+        },
+        {
+          "ref": "capsicum",
+          "grams": 37,
+          "note": "1/4 cup green pepper"
+        },
+        {
+          "ref": "onion",
+          "grams": 80,
+          "note": "1/2 cup sweet onion"
+        },
+        {
+          "ref": "oil",
+          "grams": 14,
+          "note": "~1 tbsp Graza EVOO (estimate)"
+        }
+      ],
+      "steps": [
+        "Mix moong dal flour, sooji, psyllium, spices, salt and sweetener; add water to a pourable batter and rest 10-15 min.",
+        "Fold in crumbled tofu, onion, tomato, green pepper and green chili.",
+        "Cook thin chillas on a hot tawa with a little Graza EVOO, both sides.",
+        "Batch is ~725 g cooked. Take ~75 g aside (daughter/dad); split the rest two ways, ~325 g each."
+      ],
+      "tags": [
+        "gujarati",
+        "high-protein"
+      ],
+      "notes": "Full batch (725 g cooked) = 1081 kcal / 63 g protein / 162 g carb / 26 g fat / 37 g fiber. Per 325 g portion (each of us, after 75 g set aside) = 485 kcal / 28 P / 73 C / 12 F / 17 fiber. The 75 g side portion = 112 kcal / 7 P. Oil is an estimate (1 tbsp Graza EVOO) - adjust in Library if you used more/less. App 'per serving' = full batch / 2 (~540 kcal, the no-side case); use the 325 g Portion readout for the real per-plate number.",
+      "source": "harsh-2026-09-03",
+      "updatedAt": "2026-09-03T00:00:00Z"
     }
   ],
   "schedule": {},
