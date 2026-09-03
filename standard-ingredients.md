@@ -16,6 +16,7 @@ Applies to both Cronometer accounts (Harsh = account A, Vruddhi = account B) unl
 | Nut butter | NuttZo Organic 7 Nut & Seed Butter | Per Harsh 2026-09-03 |
 | Ghee | Homemade ghee, made from Kerrygold Unsalted Pure Irish Butter | Home-rendered; nutrition ≈ generic ghee / clarified butter (~112 kcal/tbsp, pure fat). Log as ghee, not butter |
 | Tofu / firm tofu | Nasoya Organic Super Firm Tofu | Super-firm (denser, higher protein than firm/extra-firm) |
+| Ajwain / carom seeds | Pride of India Ajwain Seed (Whole, Organic) | Cronometer food id 25866761 ("Pride Of India, Ajwain Seed Whole Organic Spices"). NOT mustard seed — Cronometer's fuzzy import matched "ajwain" to Mustard Seed (id 450516) once; always pick 25866761 |
 
 ## How to extend this list
 
