@@ -4,11 +4,13 @@
 // Settings (or clears site data).
 //
 // This is a guard rail against accidental edits on our own phones — NOT
-// security. The recipe data is a public file on GitHub; anyone with the link
-// can read it, and a determined person could edit via GitHub directly. To
-// change the PIN, edit EDIT_PIN below and redeploy.
+// security, and the PIN is NOT secret. It ships in the client bundle of a
+// public repo, so anyone can read it from view-source. It is deliberately an
+// easy number: its only job is to make a destructive tap deliberate. Real
+// write access is controlled by the GitHub token in Settings, which is the
+// thing that actually matters. To change it, edit below and redeploy.
 
-export const EDIT_PIN = '2314'
+export const EDIT_PIN = '1234'
 
 const KEY = 'vk.editUnlock'
 
