@@ -1690,62 +1690,6 @@
   },
   "recipes": [
     {
-      "id": "morning-smoothie",
-      "name": "Morning protein smoothie",
-      "category": "breakfast",
-      "servings": 1,
-      "yieldGramsCooked": null,
-      "ingredients": [
-        {
-          "ref": "whey-levels",
-          "grams": 31,
-          "note": "1 scoop"
-        },
-        {
-          "ref": "fage-0",
-          "grams": 100
-        },
-        {
-          "ref": "milk-2pct",
-          "grams": 200
-        },
-        {
-          "ref": "peanut-butter",
-          "grams": 8,
-          "note": "1/2 tbsp"
-        },
-        {
-          "ref": "chia",
-          "grams": 8,
-          "note": "1/2 tbsp"
-        },
-        {
-          "ref": "hemp-hearts",
-          "grams": 8,
-          "note": "1/2 tbsp"
-        },
-        {
-          "ref": "mixed-berries",
-          "grams": 60
-        },
-        {
-          "ref": "spinach",
-          "grams": 30
-        }
-      ],
-      "steps": [
-        "Blend everything with ice.",
-        "Add 5 g creatine (no nutrition impact)."
-      ],
-      "tags": [
-        "daily-constant",
-        "post-workout"
-      ],
-      "notes": "Seed values run ~5% above the owner's Cronometer log (425 kcal / 44 g). Calibrate grams to match.",
-      "source": "seed",
-      "updatedAt": "2026-08-30T00:00:00Z"
-    },
-    {
       "id": "besan-chilla-paneer",
       "name": "Besan chilla with paneer stuffing",
       "category": "breakfast",
@@ -3007,11 +2951,6 @@
           "note": "1/2 cup"
         },
         {
-          "ref": "strawberries",
-          "grams": 24,
-          "note": "2 medium"
-        },
-        {
           "ref": "chia",
           "grams": 5,
           "note": "1/2 tbsp"
@@ -3023,8 +2962,8 @@
         },
         {
           "ref": "nut-seed-butter",
-          "grams": 8,
-          "note": "~1/2 tbsp NuttZo"
+          "grams": 16,
+          "note": "1 tbsp NuttZo"
         },
         {
           "ref": "whey-levels",
@@ -3035,16 +2974,11 @@
           "ref": "creatine",
           "grams": 5,
           "note": "1 scoop — non-caloric"
-        },
-        {
-          "ref": "cocoa",
-          "grams": 5,
-          "note": "1 tbsp cacao powder"
         }
       ],
       "steps": [
         "Blend everything with ice/water.",
-        "The daily version — whey + creatine + cacao."
+        "The daily version — whey + creatine."
       ],
       "tags": [
         "no-cook",
@@ -3052,9 +2986,9 @@
         "daily-constant",
         "post-workout"
       ],
-      "notes": "Imported from Cronometer recipe #81102418. Per serving (320 g) ≈ 425 kcal / 43.7 g protein / 31.7 g carbs / 12 g fat / 8.8 g fiber.",
+      "notes": "Imported from Cronometer recipe #81102418. Strawberries and cocoa removed and NuttZo raised to 1 tbsp on 2026-09-03 (household does not add berries/cocoa). Recompute from ingredients ≈ 427 kcal / 44 g protein / 29 g carbs / 16 g fat / 5.4 g fiber per serving (418 g); recalibrate against Cronometer once the saved recipe there is updated.",
       "source": "cronometer-import-2026-08-31",
-      "updatedAt": "2026-08-31T00:00:00Z"
+      "updatedAt": "2026-09-03T00:00:00Z"
     },
     {
       "id": "besan-paratha",
@@ -3352,73 +3286,6 @@
       "notes": "Imported from Cronometer recipe #81120118. Per serving ≈ 192 kcal / 4 g protein / 6 g fiber. Salt and chilli powder are heavy in this one — sodium ~1980 mg/serving.",
       "source": "cronometer-import-2026-08-31",
       "updatedAt": "2026-08-31T00:00:00Z"
-    },
-    {
-      "id": "protein-smoothie-dragonfruit",
-      "name": "Protein smoothie — dragonfruit",
-      "category": "breakfast",
-      "servings": 1,
-      "yieldGramsCooked": null,
-      "ingredients": [
-        {
-          "ref": "dragon-fruit-blend",
-          "grams": 105,
-          "note": "~1/2 bag (Dole)"
-        },
-        {
-          "ref": "fage-0",
-          "grams": 200,
-          "note": "~1 cup, 0%"
-        },
-        {
-          "ref": "almond-milk-unsweetened",
-          "grams": 150,
-          "note": "2/3 cup"
-        },
-        {
-          "ref": "whey-levels",
-          "grams": 21,
-          "note": "~2/3 scoop"
-        },
-        {
-          "ref": "almond-butter",
-          "grams": 10,
-          "note": "~2 tsp"
-        },
-        {
-          "ref": "chia",
-          "grams": 14,
-          "note": "1 heaped tbsp"
-        },
-        {
-          "ref": "hemp-hearts",
-          "grams": 5,
-          "note": "1/2 tbsp"
-        },
-        {
-          "ref": "flax-seeds",
-          "grams": 3,
-          "note": "1 tsp, ground"
-        },
-        {
-          "ref": "creatine",
-          "grams": 5,
-          "note": "1 scoop — non-caloric"
-        }
-      ],
-      "steps": [
-        "Blend everything smooth with a few ice cubes and a splash of water.",
-        "The dragonfruit variant of the daily smoothie — no cocoa, almond butter in place of NuttZo, a little more yogurt."
-      ],
-      "tags": [
-        "no-cook",
-        "high-protein",
-        "daily-constant",
-        "post-workout"
-      ],
-      "notes": "Imported from Cronometer recipe #81410067 (logged 2026-09-02). Full recipe = 1 serving ≈ 466 kcal / 44 g protein / 32 g carbs / 17 g fat / 9 g fiber. Ingredient list reconstructed to hit those totals (±10%); calibrate against Cronometer over time.",
-      "source": "cronometer-import-2026-09-02",
-      "updatedAt": "2026-09-02T00:00:00Z"
     },
     {
       "id": "apple-cinnamon-yogurt-bowl",
