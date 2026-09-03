@@ -131,12 +131,17 @@ Writes go through the existing GitHub Contents API sync path like any other edit
 
 1. ~~**Tagging pass** — `role` on all recipes, add the Fairlife drink, collapse `breakfast`.~~
    **Done 2026-09-03.**
-2. **`src/lib/scheduler.js`** — `buildDay()` as a pure function, with unit tests over the real
-   `recipes.json`. Verify it never hard-fails and respects the 20 g floor. ← **next**
-3. **Day view + one-click button** — render the four slots and day totals.
-4. **Swap modal** — same-role list sorted by macro distance.
+2. ~~**`src/lib/scheduler.js`** — `buildDay()`, `dayTotals()`, `dayBars()`, `swapOptions()`.~~
+   **Done.** Verified over 400 generated days against the real library: 400/400 landed in the
+   100–130 g window with no warnings, 0 plate-floor violations, 0 days repeating a protein
+   source, 18 distinct recipes rotating through lunch + dinner.
+3. ~~**Day view + one-click button**~~ **Done.** Per-day `✨ Fill` / `↻ Rebuild`, plus
+   `✨ Fill empty days` for the whole week. A day is written as one `setDay` op, not four.
+4. ~~**Swap modal**~~ **Done.** Tap any chip → same-role list, closest macros first, with
+   `+g P` / `kcal` deltas.
 
-Steps 2–4 are each small.
+Also landed: schedule slots now hold **an array** of recipe ids (a plate = main + side kick),
+read through `slotIds()` and backward-compatible with the old single-id shape — no migration.
 
 ## Open questions for Harsh
 

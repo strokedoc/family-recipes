@@ -1,8 +1,16 @@
 // Weekly meal schedule + grocery-list derivation.
-// Schedule lives as data.schedule[date][meal] = recipeId (date = YYYY-MM-DD, Monday-start weeks).
+// Schedule lives as data.schedule[date][meal] (date = YYYY-MM-DD, Monday-start weeks).
+// A slot holds either a single recipeId (legacy) or an array of them, so a meal
+// can be a plate — a main plus a side kick. Always read slots through slotIds().
 // Grocery adjustments (checked-off / extra items) live per week in data.groceryLists[weekStart].
 
 export const MEALS = ['breakfast', 'lunch', 'dinner', 'snack']
+
+// Normalise a slot to an array. Accepts a string, an array, null or undefined.
+export function slotIds(slot) {
+  if (!slot) return []
+  return (Array.isArray(slot) ? slot : [slot]).filter(Boolean)
+}
 export const MEAL_LABELS = { breakfast: 'Breakfast', lunch: 'Lunch', dinner: 'Dinner', snack: 'Snack' }
 
 function pad(n) {
@@ -86,7 +94,7 @@ export function autoFillWeek(data, weekStart, recipeIds) {
   const emptyByMeal = Object.fromEntries(MEALS.map((m) => [m, []]))
   for (const date of weekDates(weekStart)) {
     const day = schedule[date] || {}
-    for (const meal of MEALS) if (!day[meal]) emptyByMeal[meal].push({ date, meal })
+    for (const meal of MEALS) if (!slotIds(day[meal]).length) emptyByMeal[meal].push({ date, meal })
   }
   for (const meal of MEALS) emptyByMeal[meal] = shuffle(emptyByMeal[meal])
   const anyEmpty = shuffle(MEALS.flatMap((m) => emptyByMeal[m]))
@@ -116,14 +124,14 @@ export function buildGroceryList(data, weekStart) {
     const day = data.schedule?.[date]
     if (!day) continue
     for (const meal of MEALS) {
-      const recipeId = day[meal]
-      if (!recipeId) continue
-      const recipe = data.recipes.find((r) => r.id === recipeId)
-      if (!recipe) continue
-      for (const item of recipe.ingredients) {
-        const ing = data.ingredients[item.ref]
-        if (!ing?.fresh) continue
-        totals[item.ref] = (totals[item.ref] || 0) + item.grams
+      for (const recipeId of slotIds(day[meal])) {
+        const recipe = data.recipes.find((r) => r.id === recipeId)
+        if (!recipe) continue
+        for (const item of recipe.ingredients) {
+          const ing = data.ingredients[item.ref]
+          if (!ing?.fresh) continue
+          totals[item.ref] = (totals[item.ref] || 0) + item.grams
+        }
       }
     }
   }

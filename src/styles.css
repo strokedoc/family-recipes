@@ -835,41 +835,192 @@ textarea:focus {
 }
 .meal-row {
   display: flex;
-  align-items: center;
+  /* Chips wrap on narrow screens — keep the label pinned to the first line
+     rather than floating to the middle of a tall block. */
+  align-items: flex-start;
   gap: 8px;
 }
 .meal-label {
   flex-shrink: 0;
   width: 68px;
+  padding-top: 9px;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   color: var(--ink-soft);
 }
-.meal-slot {
+.day-fill {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--turmeric-soft);
+  color: var(--chili-deep);
+}
+
+/* A meal is a plate: one or more recipe chips, plus an add button. */
+.meal-items {
   flex: 1;
-  text-align: left;
-  font-weight: 600;
-  font-size: 14px;
-  padding: 9px 12px;
-  border-radius: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
 }
-.meal-slot.filled {
+.meal-chip {
+  display: inline-flex;
+  align-items: center;
   background: var(--methi-soft);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.meal-chip-name {
+  font-weight: 600;
+  font-size: 13.5px;
   color: var(--methi);
+  padding: 8px 6px 8px 10px;
+  text-align: left;
 }
-.meal-slot.empty {
-  background: var(--paper-deep);
-  color: var(--ink-soft);
-  border: 1px dashed var(--line);
+.meal-chip-x {
+  color: var(--methi);
+  opacity: 0.55;
+  font-size: 11px;
+  padding: 8px 8px 8px 4px;
 }
-.meal-clear {
+.meal-add,
+.meal-move {
   flex-shrink: 0;
   width: 30px;
   height: 30px;
+  border-radius: 9px;
   color: var(--ink-soft);
-  font-size: 13px;
+  font-size: 14px;
+  background: var(--paper-deep);
+  border: 1px dashed var(--line);
+}
+.meal-move {
+  border-style: solid;
+  font-size: 12px;
+}
+
+/* ── daily macro bars ── */
+.day-bars {
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+}
+.bar-label {
+  width: 62px;
+  flex-shrink: 0;
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+.bar-track {
+  position: relative;
+  flex: 1;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--paper-deep);
+  overflow: hidden;
+}
+.bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--turmeric);
+  transition: width 0.18s ease;
+}
+/* Protein is the one you're filling toward — green once it clears the floor. */
+.bar-row.reach.hit .bar-fill {
+  background: var(--methi);
+}
+/* Calories, net carbs and fat are ceilings — maroon once crossed. */
+.bar-row.ceiling.over .bar-fill {
+  background: var(--chili);
+}
+.bar-row.reach.short .bar-fill {
+  background: var(--turmeric);
+}
+.bar-tick {
+  position: absolute;
+  top: -2px;
+  width: 2px;
+  height: 11px;
+  background: var(--ink);
+  opacity: 0.35;
+  border-radius: 1px;
+}
+.bar-val {
+  width: 62px;
+  flex-shrink: 0;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+.bar-row.ceiling.over .bar-val {
+  color: var(--chili);
+}
+.bar-row.reach.hit .bar-val {
+  color: var(--methi);
+}
+.bar-target {
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+.bars-note {
+  margin-top: 2px;
+  font-size: 10.5px;
+  color: var(--ink-soft);
+  opacity: 0.8;
+}
+
+/* ── swap sheet ── */
+.swap-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 58vh;
+  overflow-y: auto;
+  padding: 2px 0;
+}
+.swap-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--paper-deep);
+}
+.swap-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+.swap-deltas {
+  flex-shrink: 0;
+  display: flex;
+  gap: 8px;
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+}
+.swap-d.good {
+  color: var(--methi);
+}
+.swap-d.bad {
+  color: var(--chili);
 }
 
 /* ── grocery ── */
