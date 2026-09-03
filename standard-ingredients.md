@@ -15,6 +15,7 @@ Applies to both Cronometer accounts (Harsh = account A, Vruddhi = account B) unl
 | 2% milk | a2 Milk (Reduced Fat 2%) | a2 protein variety |
 | Nut butter | NuttZo Organic 7 Nut & Seed Butter | Per Harsh 2026-09-03 |
 | Ghee | Homemade ghee, made from Kerrygold Unsalted Pure Irish Butter | Home-rendered; nutrition ≈ generic ghee / clarified butter (~112 kcal/tbsp, pure fat). Log as ghee, not butter |
+| Tofu / firm tofu | Nasoya Organic Super Firm Tofu | Super-firm (denser, higher protein than firm/extra-firm) |
 
 ## How to extend this list
 
