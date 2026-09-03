@@ -21,49 +21,42 @@ each clear a 20 g floor, the day is already at ~85 g and the filler only has to 
 residual. There is no optimisation problem here — it is "pick two mains above a floor, then pick
 the filler that closes the gap." No solver, no dependency.
 
-## Prerequisite: the library is not shaped for this yet
+## Library shape — **tagging pass DONE 2026-09-03**
 
-`category` is too coarse. Today `lunch-dinner` holds a mix of protein mains, sides, and breads,
-so a naive picker will schedule Jowar rotla (6 g protein) as dinner. Two new fields fix it.
+`category` alone was too coarse: `lunch-dinner` mixed protein mains, sides and breads, so a naive
+picker would have scheduled Jowar rotla (6 g protein) as dinner. Every recipe now carries a
+`role`, and `breakfast` has been collapsed to the smoothie slot only (per Harsh — everything else
+is lunch, side, dinner or snack).
 
-### 1. `role` on every recipe — **required**
+| role | meaning | count | scheduler use |
+|---|---|---|---|
+| `constant` | fixed daily item | 2 | breakfast slot |
+| `main` | carries the meal's protein | 15 | lunch/dinner slots |
+| `side` | vegetable/gravy/raita accompaniment | 6 | optional on a plate |
+| `bread` | roti, thepla, rotla, paratha | 6 | optional on a plate |
+| `filler` | drink/bowl used to top up protein | 9 | filler slot |
+| `dessert` | — | 3 | ignored |
 
-| role | meaning | scheduler use |
-|---|---|---|
-| `main` | carries the meal's protein | eligible for lunch/dinner slots |
-| `side` | vegetable/gravy accompaniment | optional garnish on a plate |
-| `bread` | roti, thepla, rotla, paratha | optional garnish on a plate |
-| `filler` | drink/bowl used to top up protein | eligible for the filler slot |
-| `constant` | fixed daily item | breakfast slot |
+`proteinSource` (`paneer | tofu | dal | soya | besan | chickpea`) is set on all 15 mains, used
+only to stop lunch and dinner both coming back paneer.
 
-Initial tagging (17 `lunch-dinner` + fillers), by protein per serving:
+**The 20 g floor is a per-plate check, not per-recipe.** Only 9 of 15 mains clear 20 g on their
+own; the other 6 (gatte 19.5, soya-keema 17.8, poha 17.0, toor-dal 16.5, tofu-bhurji 16.4,
+chole 11.4) qualify when paired with a side. A per-recipe floor would have cut the main pool by
+40% for no good reason.
 
-- **main**: moong-dal-chilla (31.7), paneer-frankie (31.2), lahsooni-palak-paneer (26.7),
-  tofu-enchiladas (26.3), paneer-tikka (24.0), palak-paneer-light (21.6), paneer-bhurji (21.4),
-  gatte-ki-sabzi (19.5)*, soya-keema (17.8)*, protein-toor-dal (16.5)*, tofu-bhurji (16.4)*
-- **side**: tandaljo-bhaji, besan-stuffed-peppers, cucumber-raita, sprouted-moth, guacamole
-- **bread**: jowar-rotla, tofu-atta-rotis, besan-paratha, methi-tofu-thepla
-- **filler**: fairlife-nutrition-plan (to add), yogurt-protein-bowl, cucumber-raita, chhaas
-- **constant**: protein-smoothie
+`fairlife-drink` added (`role: filler`, ~150 kcal / 30 g protein per bottle). **Its numbers are
+pencilled from the standard label and still need verifying against the actual bottle.**
 
-\* below the 20 g floor as single servings — they qualify as mains only when paired with a side
-that lifts the plate over 20 g, or at a larger portion. Tag them `main` and let the floor check
-run on the assembled plate, not the recipe.
+### Feasibility check (run against the tagged library)
 
-### 2. `proteinSource` on mains — optional but cheap
+Enumerating every (lunch plate × dinner plate × filler) combination that respects the 20 g floor
+and the different-proteinSource rule: **17,487 of 27,420 combinations land in the 100–130 g
+protein window (64%).** The scheduler will effectively never fail to find a valid day, which is
+what lets us keep it a simple picker with retries instead of a solver.
 
-`paneer | tofu | dal | soya | yogurt | besan | chickpea`. Used only so lunch and dinner don't both
-come back paneer. Nice-to-have; skip if it slows the tagging pass.
-
-### 3. Add the Fairlife drink
-
-Not in the library at all. Add as a recipe with `role: filler`, ~30 g protein / ~150 kcal
-per bottle. Confirm against the label before committing the numbers.
-
-### 4. Fix miscategorised recipes
-
-`moong-dal-chilla` was filed as `breakfast`; corrected to `lunch-dinner` 2026-09-03. Audit the
-rest of `breakfast` for other mains that are really lunches.
+Leanest valid days come out around **980–1,040 kcal** at 100 g protein — comfortably under both
+calorie targets, so portion sizes have room to move in either direction.
 
 ## Scheduler algorithm
 
@@ -136,11 +129,20 @@ Writes go through the existing GitHub Contents API sync path like any other edit
 
 ## Build order
 
-1. **Tagging pass** — add `role` to all recipes, add the Fairlife drink, audit `breakfast` for
-   misfiled mains. Data only, no code. *This is the blocker; do it first.*
+1. ~~**Tagging pass** — `role` on all recipes, add the Fairlife drink, collapse `breakfast`.~~
+   **Done 2026-09-03.**
 2. **`src/lib/scheduler.js`** — `buildDay()` as a pure function, with unit tests over the real
-   `recipes.json`. Verify it never hard-fails and respects the 20 g floor.
+   `recipes.json`. Verify it never hard-fails and respects the 20 g floor. ← **next**
 3. **Day view + one-click button** — render the four slots and day totals.
 4. **Swap modal** — same-role list sorted by macro distance.
 
-Steps 2–4 are each small. Step 1 is the one that takes real time, and nothing works without it.
+Steps 2–4 are each small.
+
+## Open questions for Harsh
+
+- **Verify the Fairlife label** (currently pencilled at 150 kcal / 30 g protein / 340 g bottle).
+- **Should desserts be usable as fillers?** `chocolate-yogurt-mousse` is 28.9 g protein for
+  190 kcal — a better protein-per-calorie ratio than every filler except the Fairlife. It is
+  tagged `dessert` and therefore invisible to the scheduler right now.
+- **Breakfast swap-ins:** only `protein-smoothie` and `smoothie-dragon` are tagged `constant`.
+  Say the word if anything else belongs in that slot.

@@ -1699,13 +1699,28 @@
       "tags": [
         "spice"
       ]
+    },
+    "fairlife-nutrition-plan": {
+      "name": "Fairlife Nutrition Plan 30g shake",
+      "per100g": {
+        "kcal": 44,
+        "protein": 8.8,
+        "carbs": 0.9,
+        "fat": 0.74,
+        "fiber": 0.3
+      },
+      "tags": [
+        "protein-anchor",
+        "drink"
+      ],
+      "note": "1 bottle = 340 g = 150 kcal / 30 g protein. VERIFY against label."
     }
   },
   "recipes": [
     {
       "id": "besan-chilla-paneer",
       "name": "Besan chilla with paneer stuffing",
-      "category": "breakfast",
+      "category": "lunch-dinner",
       "servings": 1,
       "yieldGramsCooked": null,
       "ingredients": [
@@ -1743,7 +1758,9 @@
         "high-protein"
       ],
       "source": "seed",
-      "updatedAt": "2026-08-30T00:00:00Z"
+      "updatedAt": "2026-08-30T00:00:00Z",
+      "role": "main",
+      "proteinSource": "besan"
     },
     {
       "id": "moong-dal-chilla",
@@ -1844,12 +1861,14 @@
       ],
       "notes": "Full batch (725 g cooked) = 1081 kcal / 63 g protein / 162 g carb / 26 g fat / 37 g fiber. Per 325 g portion (each of us, after 75 g set aside) = 485 kcal / 28 P / 73 C / 12 F / 17 fiber. The 75 g side portion = 112 kcal / 7 P. Oil is an estimate (1 tbsp Graza EVOO) - adjust in Library if you used more/less. App 'per serving' = full batch / 2 (~540 kcal, the no-side case); use the 325 g Portion readout for the real per-plate number.",
       "source": "harsh-2026-09-03",
-      "updatedAt": "2026-09-03T00:00:00Z"
+      "updatedAt": "2026-09-03T00:00:00Z",
+      "role": "main",
+      "proteinSource": "dal"
     },
     {
       "id": "masala-oats-paneer",
       "name": "Masala oats with paneer",
-      "category": "breakfast",
+      "category": "lunch-dinner",
       "servings": 1,
       "yieldGramsCooked": null,
       "ingredients": [
@@ -1883,12 +1902,14 @@
         "quick"
       ],
       "source": "seed",
-      "updatedAt": "2026-08-30T00:00:00Z"
+      "updatedAt": "2026-08-30T00:00:00Z",
+      "role": "main",
+      "proteinSource": "paneer"
     },
     {
       "id": "protein-poha",
       "name": "Protein poha",
-      "category": "breakfast",
+      "category": "lunch-dinner",
       "servings": 2,
       "yieldGramsCooked": null,
       "ingredients": [
@@ -1928,7 +1949,9 @@
         "weekend"
       ],
       "source": "seed",
-      "updatedAt": "2026-08-30T00:00:00Z"
+      "updatedAt": "2026-08-30T00:00:00Z",
+      "role": "main",
+      "proteinSource": "soya"
     },
     {
       "id": "soya-keema",
@@ -1971,7 +1994,9 @@
       ],
       "notes": "Highest protein-per-calorie dish in the database. The one to cook weekly.",
       "source": "seed",
-      "updatedAt": "2026-08-30T00:00:00Z"
+      "updatedAt": "2026-08-30T00:00:00Z",
+      "role": "main",
+      "proteinSource": "soya"
     },
     {
       "id": "protein-toor-dal",
@@ -2013,7 +2038,9 @@
       ],
       "notes": "Granules disappear into the dal. ~2x the protein of plain dal.",
       "source": "seed",
-      "updatedAt": "2026-08-30T00:00:00Z"
+      "updatedAt": "2026-08-30T00:00:00Z",
+      "role": "main",
+      "proteinSource": "dal"
     },
     {
       "id": "paneer-bhurji",
@@ -2053,7 +2080,9 @@
       ],
       "notes": "Swap to whole-milk paneer: +115 kcal/serving. Swap to tofu-firm 300 g for the lighter version.",
       "source": "seed",
-      "updatedAt": "2026-08-30T00:00:00Z"
+      "updatedAt": "2026-08-30T00:00:00Z",
+      "role": "main",
+      "proteinSource": "paneer"
     },
     {
       "id": "tofu-bhurji",
@@ -2092,7 +2121,9 @@
         "vruddhi-friendly"
       ],
       "source": "seed",
-      "updatedAt": "2026-08-30T00:00:00Z"
+      "updatedAt": "2026-08-30T00:00:00Z",
+      "role": "main",
+      "proteinSource": "tofu"
     },
     {
       "id": "chole",
@@ -2128,7 +2159,9 @@
       ],
       "notes": "Pair with Fage raita (150 g = 89 kcal / 15 g protein) to lift the meal's protein.",
       "source": "seed",
-      "updatedAt": "2026-08-30T00:00:00Z"
+      "updatedAt": "2026-08-30T00:00:00Z",
+      "role": "main",
+      "proteinSource": "chickpea"
     },
     {
       "id": "palak-paneer",
@@ -2172,7 +2205,9 @@
         "iron"
       ],
       "source": "seed",
-      "updatedAt": "2026-08-30T00:00:00Z"
+      "updatedAt": "2026-08-30T00:00:00Z",
+      "role": "main",
+      "proteinSource": "paneer"
     },
     {
       "id": "fage-kadhi",
@@ -2206,7 +2241,8 @@
       ],
       "notes": "Fage swap roughly doubles the protein of dahi kadhi at fewer calories.",
       "source": "seed",
-      "updatedAt": "2026-08-30T00:00:00Z"
+      "updatedAt": "2026-08-30T00:00:00Z",
+      "role": "side"
     },
     {
       "id": "sprouted-moong-chaat",
@@ -2241,7 +2277,8 @@
         "evening-snack"
       ],
       "source": "seed",
-      "updatedAt": "2026-08-30T00:00:00Z"
+      "updatedAt": "2026-08-30T00:00:00Z",
+      "role": "filler"
     },
     {
       "id": "shrikhand-fage",
@@ -2276,7 +2313,8 @@
       ],
       "notes": "Real shrikhand at a third of the calories. ~17 g protein per serving.",
       "source": "seed",
-      "updatedAt": "2026-08-30T00:00:00Z"
+      "updatedAt": "2026-08-30T00:00:00Z",
+      "role": "dessert"
     },
     {
       "id": "date-cocoa-ladoo",
@@ -2314,7 +2352,8 @@
       ],
       "notes": "~135 kcal / 9 g protein per ladoo. Batch keeps 2 weeks refrigerated.",
       "source": "seed",
-      "updatedAt": "2026-08-30T00:00:00Z"
+      "updatedAt": "2026-08-30T00:00:00Z",
+      "role": "dessert"
     },
     {
       "id": "chocolate-yogurt-mousse",
@@ -2352,12 +2391,13 @@
       ],
       "notes": "~190 kcal / 29 g protein per serving — a dessert that doubles as the fourth feeding.",
       "source": "seed",
-      "updatedAt": "2026-08-30T00:00:00Z"
+      "updatedAt": "2026-08-30T00:00:00Z",
+      "role": "dessert"
     },
     {
       "id": "tofu-paratha",
       "name": "Tofu paratha",
-      "category": "breakfast",
+      "category": "lunch-dinner",
       "servings": 1,
       "yieldGramsCooked": null,
       "ingredients": [
@@ -2397,12 +2437,13 @@
       ],
       "notes": "Tofu disappears into the dough — same paratha taste, nearly double the protein of plain.",
       "source": "seed-expansion",
-      "updatedAt": "2026-08-30T00:00:00Z"
+      "updatedAt": "2026-08-30T00:00:00Z",
+      "role": "bread"
     },
     {
       "id": "paneer-paratha",
       "name": "Paneer paratha (loaded)",
-      "category": "breakfast",
+      "category": "lunch-dinner",
       "servings": 4.5,
       "yieldGramsCooked": null,
       "ingredients": [
@@ -2474,7 +2515,8 @@
       ],
       "notes": "Harsh's actual recipe (replaces the old generic seed). Batch of 4.5 parathas ≈ 1195 kcal / 49 g protein / 25 g fiber; per paratha ≈ 265 kcal / 11 g protein / 5.7 g fiber. Two flours + flax + psyllium + besan make it much higher-fiber than a plain paneer paratha.",
       "source": "harsh-2026-08-31",
-      "updatedAt": "2026-08-31T00:00:00Z"
+      "updatedAt": "2026-08-31T00:00:00Z",
+      "role": "bread"
     },
     {
       "id": "tofu-atta-rotis",
@@ -2505,12 +2547,13 @@
       ],
       "notes": "Protein rotli: ~87 kcal / 4.4 g protein each vs 105 / 3.5 for plain — swap into any meal.",
       "source": "seed-expansion",
-      "updatedAt": "2026-08-30T00:00:00Z"
+      "updatedAt": "2026-08-30T00:00:00Z",
+      "role": "bread"
     },
     {
       "id": "methi-tofu-thepla",
       "name": "Methi-tofu thepla",
-      "category": "breakfast",
+      "category": "lunch-dinner",
       "servings": 1,
       "yieldGramsCooked": null,
       "ingredients": [
@@ -2555,7 +2598,8 @@
       ],
       "notes": "Classic Gujarati thepla with tofu smuggled in — +6 g protein over plain methi thepla.",
       "source": "seed-expansion",
-      "updatedAt": "2026-08-30T00:00:00Z"
+      "updatedAt": "2026-08-30T00:00:00Z",
+      "role": "bread"
     },
     {
       "id": "besan-dhokla",
@@ -2599,7 +2643,8 @@
       ],
       "notes": "Steamed, not fried — the oil in the vaghar is the only fat lever.",
       "source": "seed-expansion",
-      "updatedAt": "2026-08-30T00:00:00Z"
+      "updatedAt": "2026-08-30T00:00:00Z",
+      "role": "filler"
     },
     {
       "id": "gatte-ki-sabzi",
@@ -2641,7 +2686,9 @@
       ],
       "notes": "Fage replaces dahi in the gravy — nearly triple the protein of the standard version.",
       "source": "seed-expansion",
-      "updatedAt": "2026-08-30T00:00:00Z"
+      "updatedAt": "2026-08-30T00:00:00Z",
+      "role": "main",
+      "proteinSource": "besan"
     },
     {
       "id": "paneer-tikka",
@@ -2687,7 +2734,9 @@
       ],
       "notes": "A 250-kcal dinner anchor with 24 g protein. Pair with tofu-atta rotis.",
       "source": "seed-expansion",
-      "updatedAt": "2026-08-30T00:00:00Z"
+      "updatedAt": "2026-08-30T00:00:00Z",
+      "role": "main",
+      "proteinSource": "paneer"
     },
     {
       "id": "paneer-frankie",
@@ -2738,12 +2787,14 @@
       ],
       "notes": "31 g protein in one hand. The whole lunch, no sides needed.",
       "source": "seed-expansion",
-      "updatedAt": "2026-08-30T00:00:00Z"
+      "updatedAt": "2026-08-30T00:00:00Z",
+      "role": "main",
+      "proteinSource": "paneer"
     },
     {
       "id": "yogurt-protein-bowl",
       "name": "Greek yogurt protein bowl",
-      "category": "breakfast",
+      "category": "snack",
       "servings": 1,
       "yieldGramsCooked": null,
       "ingredients": [
@@ -2785,12 +2836,13 @@
       ],
       "notes": "The no-blender fallback breakfast — 26 g protein, zero cooking.",
       "source": "seed-expansion",
-      "updatedAt": "2026-08-30T00:00:00Z"
+      "updatedAt": "2026-08-30T00:00:00Z",
+      "role": "filler"
     },
     {
       "id": "cucumber-raita",
       "name": "Cucumber raita (Fage)",
-      "category": "snack",
+      "category": "lunch-dinner",
       "servings": 2,
       "yieldGramsCooked": null,
       "ingredients": [
@@ -2848,7 +2900,8 @@
       ],
       "notes": "All Fage 0% (do not use whole-milk yogurt). Batch ≈ 228 kcal / 29 g protein; per serving ≈ 114 kcal / 14.5 g protein / 2.2 g fiber. More cucumber and a full cup of yogurt vs the old version.",
       "source": "harsh-2026-08-31",
-      "updatedAt": "2026-08-31T00:00:00Z"
+      "updatedAt": "2026-08-31T00:00:00Z",
+      "role": "side"
     },
     {
       "id": "stuffed-peppers",
@@ -2894,7 +2947,8 @@
       ],
       "notes": "Harsh's recipe, logged as eaten (no oil). Uses mini/baby sweet peppers, not bell peppers. 3 mini peppers ≈ 55 kcal / 2.7 g protein / 2 g fiber — the besan filling is now the bigger share. Weigh a raw pepper to calibrate: ~20 g each.",
       "source": "harsh-2026-08-31",
-      "updatedAt": "2026-08-31T00:00:00Z"
+      "updatedAt": "2026-08-31T00:00:00Z",
+      "role": "side"
     },
     {
       "id": "makhana-chana-mix",
@@ -2931,7 +2985,8 @@
       ],
       "notes": "The chai-time replacement for farsan — 8 g protein per handful-and-a-half.",
       "source": "seed-expansion",
-      "updatedAt": "2026-08-30T00:00:00Z"
+      "updatedAt": "2026-08-30T00:00:00Z",
+      "role": "filler"
     },
     {
       "id": "smoothie-dragon",
@@ -3007,7 +3062,8 @@
       ],
       "notes": "Imported from Cronometer recipe #81206196. Batch makes 2 servings; 1 serving (362 g) ≈ 492 kcal / 23.5 g protein / 52.5 g carbs / 24 g fat / 10.9 g fiber. This is the variant Harsh had for breakfast on 2026-08-31 instead of Protein smoothie.",
       "source": "cronometer-import-2026-08-31",
-      "updatedAt": "2026-08-31T00:00:00Z"
+      "updatedAt": "2026-08-31T00:00:00Z",
+      "role": "constant"
     },
     {
       "id": "protein-smoothie",
@@ -3069,12 +3125,13 @@
       ],
       "notes": "Imported from Cronometer recipe #81102418. Strawberries and cocoa removed and NuttZo raised to 1 tbsp on 2026-09-03 (household does not add berries/cocoa). Recompute from ingredients ≈ 427 kcal / 44 g protein / 29 g carbs / 16 g fat / 5.4 g fiber per serving (418 g); recalibrate against Cronometer once the saved recipe there is updated.",
       "source": "cronometer-import-2026-08-31",
-      "updatedAt": "2026-09-03T00:00:00Z"
+      "updatedAt": "2026-09-03T00:00:00Z",
+      "role": "constant"
     },
     {
       "id": "besan-paratha",
       "name": "Besan paratha (tofu dough)",
-      "category": "breakfast",
+      "category": "lunch-dinner",
       "servings": 9,
       "yieldGramsCooked": null,
       "ingredients": [
@@ -3145,7 +3202,8 @@
       ],
       "notes": "Imported from Cronometer recipe #81153431. Per paratha ≈ 66 kcal / 4.5 g protein — very light because the batch is spread across ~9.",
       "source": "cronometer-import-2026-08-31",
-      "updatedAt": "2026-08-31T00:00:00Z"
+      "updatedAt": "2026-08-31T00:00:00Z",
+      "role": "bread"
     },
     {
       "id": "jowar-rotla",
@@ -3190,12 +3248,13 @@
       ],
       "notes": "Imported from Cronometer recipe #81143027. Full batch (365 g) ≈ 1503 kcal / 33 g protein / 40 g fiber; per rotla ≈ 300 kcal. Cronometer logs it as '1 full recipe' — adjust servings to your rotla count.",
       "source": "cronometer-import-2026-08-31",
-      "updatedAt": "2026-08-31T00:00:00Z"
+      "updatedAt": "2026-08-31T00:00:00Z",
+      "role": "bread"
     },
     {
       "id": "strawberry-protein-shake",
       "name": "Strawberry protein shake",
-      "category": "breakfast",
+      "category": "snack",
       "servings": 1,
       "yieldGramsCooked": null,
       "ingredients": [
@@ -3226,7 +3285,8 @@
       ],
       "notes": "Imported from Cronometer recipe #81141209. ≈ 268 kcal / 32.5 g protein per shake.",
       "source": "cronometer-import-2026-08-31",
-      "updatedAt": "2026-08-31T00:00:00Z"
+      "updatedAt": "2026-08-31T00:00:00Z",
+      "role": "filler"
     },
     {
       "id": "chhaas",
@@ -3268,12 +3328,13 @@
       ],
       "notes": "Imported from Cronometer recipe #81123667. ≈ 74 kcal / 13 g protein per glass (before water).",
       "source": "cronometer-import-2026-08-31",
-      "updatedAt": "2026-08-31T00:00:00Z"
+      "updatedAt": "2026-08-31T00:00:00Z",
+      "role": "filler"
     },
     {
       "id": "sprouted-moth",
       "name": "Sprouted moth (matki) sabzi",
-      "category": "snack",
+      "category": "lunch-dinner",
       "servings": 4,
       "yieldGramsCooked": null,
       "ingredients": [
@@ -3299,7 +3360,8 @@
       ],
       "notes": "Imported from Cronometer recipe #81120598. Per serving ≈ 107 kcal / 5 g protein.",
       "source": "cronometer-import-2026-08-31",
-      "updatedAt": "2026-08-31T00:00:00Z"
+      "updatedAt": "2026-08-31T00:00:00Z",
+      "role": "side"
     },
     {
       "id": "tandaljo-bhaji",
@@ -3366,12 +3428,13 @@
       ],
       "notes": "Imported from Cronometer recipe #81120118. Per serving ≈ 192 kcal / 4 g protein / 6 g fiber. Salt and chilli powder are heavy in this one — sodium ~1980 mg/serving.",
       "source": "cronometer-import-2026-08-31",
-      "updatedAt": "2026-08-31T00:00:00Z"
+      "updatedAt": "2026-08-31T00:00:00Z",
+      "role": "side"
     },
     {
       "id": "apple-cinnamon-yogurt-bowl",
       "name": "Apple cinnamon yogurt bowl",
-      "category": "breakfast",
+      "category": "snack",
       "servings": 1,
       "yieldGramsCooked": null,
       "ingredients": [
@@ -3419,12 +3482,13 @@
       ],
       "notes": "Imported from Cronometer recipe #81420429 (logged 2026-09-02). One bowl ≈ 323 kcal / 21 g protein / 58 g carbs / 7 g fat / 10 g fiber. Apple and date amounts are the main estimate; adjust to taste.",
       "source": "cronometer-import-2026-09-02",
-      "updatedAt": "2026-09-02T00:00:00Z"
+      "updatedAt": "2026-09-02T00:00:00Z",
+      "role": "filler"
     },
     {
       "id": "cottage-cheese-toast",
       "name": "Cottage cheese toast",
-      "category": "breakfast",
+      "category": "snack",
       "servings": 2,
       "yieldGramsCooked": null,
       "ingredients": [
@@ -3477,7 +3541,8 @@
       ],
       "notes": "Imported from Cronometer recipe #81323132 (logged 2026-09-01). Full batch ≈ 617 kcal / 32 g protein / 62 g carbs / 31 g fat / 14 g fiber; per serving ≈ 310 kcal / 16 g protein. Ingredient list reconstructed to match those totals (±10%).",
       "source": "cronometer-import-2026-09-02",
-      "updatedAt": "2026-09-02T00:00:00Z"
+      "updatedAt": "2026-09-02T00:00:00Z",
+      "role": "filler"
     },
     {
       "id": "lahsooni-palak-paneer-pea-rice",
@@ -3561,7 +3626,9 @@
       ],
       "notes": "Combined from two Cronometer recipes logged 2026-09-01: Lahsooni palak paneer #81345232 (batch ≈ 1180 kcal / 62 g protein / 87 g fat) + Pea rice #81354146 (≈ 254 kcal / 10 g protein / 53 g carbs per portion, 2 portions here). Combined batch ≈ 1760 kcal / 79 g protein / 153 g carbs / 96 g fat / 20 g fiber; per plate ≈ 585 kcal / 26 g protein. Ingredient lists reconstructed to match Cronometer totals (±10%).",
       "source": "cronometer-import-2026-09-02",
-      "updatedAt": "2026-09-02T00:00:00Z"
+      "updatedAt": "2026-09-02T00:00:00Z",
+      "role": "main",
+      "proteinSource": "paneer"
     },
     {
       "id": "tofu-enchiladas",
@@ -3635,12 +3702,14 @@
       ],
       "notes": "Added from Harsh & Vruddhi's dinner 2026-09-02. Batch (2 servings) ≈ 1215 kcal / 53 g protein / 117 g carbs / 70 g fat / 32 g fiber; per serving ≈ 608 kcal / 26 g protein / 58 g carbs / 35 g fat. Branded per-100g values are label estimates — calibrate against Cronometer.",
       "source": "manual-2026-09-02",
-      "updatedAt": "2026-09-02T00:00:00Z"
+      "updatedAt": "2026-09-02T00:00:00Z",
+      "role": "main",
+      "proteinSource": "tofu"
     },
     {
       "id": "guacamole",
       "name": "Guacamole",
-      "category": "snack",
+      "category": "lunch-dinner",
       "servings": 2,
       "yieldGramsCooked": null,
       "ingredients": [
@@ -3688,7 +3757,34 @@
       ],
       "notes": "Added from Harsh & Vruddhi's dinner 2026-09-02. Batch (2 servings) ≈ 263 kcal / 4 g protein / 18 g carbs / 22 g fat / 11 g fiber; per serving ≈ 132 kcal / 2 g protein / 9 g carbs / 11 g fat.",
       "source": "manual-2026-09-02",
-      "updatedAt": "2026-09-02T00:00:00Z"
+      "updatedAt": "2026-09-02T00:00:00Z",
+      "role": "side"
+    },
+    {
+      "id": "fairlife-drink",
+      "name": "Fairlife Nutrition Plan shake",
+      "category": "snack",
+      "servings": 1,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        {
+          "ref": "fairlife-nutrition-plan",
+          "grams": 340,
+          "note": "1 bottle"
+        }
+      ],
+      "steps": [
+        "Open bottle. Drink."
+      ],
+      "tags": [
+        "no-cook",
+        "high-protein",
+        "protein-filler"
+      ],
+      "notes": "Afternoon protein filler. ~150 kcal / 30 g protein per bottle. Numbers pencilled from the standard label - verify.",
+      "source": "harsh-2026-09-03",
+      "updatedAt": "2026-09-03T00:00:00Z",
+      "role": "filler"
     }
   ],
   "schedule": {},
