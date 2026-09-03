@@ -6,10 +6,9 @@ import {
   proteinDensity,
   fmt,
   cronometerLine,
-  budgetHint,
 } from '../lib/nutrition.js'
 
-export default function Recipe({ recipe, data, profiles, commit, showToast, onEdit, onBack }) {
+export default function Recipe({ recipe, data, commit, showToast, onEdit, onBack }) {
   const serving = useMemo(() => perServing(recipe, data.ingredients), [recipe, data])
   const totals = useMemo(() => recipeTotals(recipe, data.ingredients), [recipe, data])
   const density = proteinDensity(serving)
@@ -21,13 +20,6 @@ export default function Recipe({ recipe, data, profiles, commit, showToast, onEd
   const portionMacros = recipe.yieldGramsCooked
     ? perGrams(recipe, data.ingredients, portion)
     : null
-
-  const hints = useMemo(() => {
-    if (!profiles?.profiles) return []
-    return profiles.profiles
-      .map((p) => budgetHint(p, recipe.category, portionMacros || serving))
-      .filter(Boolean)
-  }, [profiles, recipe, serving, portionMacros])
 
   async function copyMacros() {
     const line = portionMacros
@@ -81,16 +73,6 @@ export default function Recipe({ recipe, data, profiles, commit, showToast, onEd
           <MacroCell label="P/100kcal" value={fmt(density, 1)} />
         </div>
         <div className="macro-caption">per serving (1 of {recipe.servings})</div>
-        {hints.length > 0 && (
-          <div className="budget-row">
-            {hints.map((h) => (
-              <span key={h.name} className="budget-chip">
-                {h.name} · {h.pct}% of {h.meal}
-              </span>
-            ))}
-            <span className="budget-caption">{portionMacros ? 'for this portion' : 'per serving'}</span>
-          </div>
-        )}
       </section>
 
       <section className="portion-panel">

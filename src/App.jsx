@@ -13,7 +13,6 @@ import {
   saveQueue,
   applyOp,
   fetchLocalData,
-  fetchProfiles,
   flushQueue,
 } from './lib/store.js'
 import { fetchLatest } from './lib/github.js'
@@ -22,7 +21,6 @@ import { EDIT_PIN, GATED_OPS, isUnlocked, unlock } from './lib/editlock.js'
 export default function App() {
   const [nav, setNav] = useState({ view: 'browse' })
   const [data, setData] = useState(null)
-  const [profiles, setProfiles] = useState(null)
   const [settings, setSettings] = useState(loadSettings)
   const [pending, setPending] = useState(loadQueue().length)
   const [sync, setSync] = useState({ state: 'loading', detail: '' }) // loading | readonly | ok | pending | offline | error
@@ -41,7 +39,6 @@ export default function App() {
   // Initial load: local file first (fast, offline-capable), then API for freshness.
   useEffect(() => {
     let alive = true
-    fetchProfiles().then((p) => alive && setProfiles(p))
     fetchLocalData()
       .then((d) => alive && setData((cur) => cur || d))
       .catch(() => alive && setSync({ state: 'error', detail: 'Could not load recipes' }))
@@ -220,7 +217,6 @@ export default function App() {
           <Recipe
             recipe={recipe}
             data={data}
-            profiles={profiles}
             commit={commit}
             showToast={showToast}
             onEdit={() => setNav({ view: 'edit', id: recipe.id, from: nav.from })}

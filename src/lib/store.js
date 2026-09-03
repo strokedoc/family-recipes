@@ -105,16 +105,6 @@ export async function fetchLocalData() {
   return res.json()
 }
 
-export async function fetchProfiles() {
-  try {
-    const res = await fetch('data/profiles.json')
-    if (!res.ok) return null
-    return await res.json()
-  } catch {
-    return null
-  }
-}
-
 // ---- sync ----
 
 // Flush the queue: replay onto fresh head, PUT, retry on write race.

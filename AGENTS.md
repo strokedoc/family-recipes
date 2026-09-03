@@ -16,7 +16,9 @@ portion?" Stack: Vite + React static SPA on GitHub Pages, no backend.
 - **Nutrition is always computed from `per100g` × grams, never stored per recipe.** Do not add
   cached calorie/macro totals to a recipe object. If a recipe's numbers look wrong, fix the
   ingredient's `per100g` in the library — every recipe using it updates at once.
-- `public/data/profiles.json` drives the per-person "% of meal budget" hints.
+- There are no per-person profiles. Both people eat the same portion; the app plans
+  against one unlabelled baseline target (`DAILY_TARGET` in `src/lib/scheduler.js`) and any
+  individual surplus is handled at Cronometer logging time, outside the app.
 - The phone app also writes `recipes.json` via the GitHub Contents API (SHA-checked, recipe-level
   merge on conflict). Keep commits **data-only** when you change recipes so those merges stay clean.
 
@@ -64,7 +66,7 @@ Three cases:
 
 ## Pushing changes
 
-After any change to app recipe data (`public/data/recipes.json`, `profiles.json`,
+After any change to app recipe data (`public/data/recipes.json`,
 `standard-ingredients.md`), **commit and push to `main` without waiting for Harsh to ask.** Push to
 `main` auto-deploys to GitHub Pages (`.github/workflows/deploy.yml`). This is low-stakes — it's a
 family recipe app with no health data.

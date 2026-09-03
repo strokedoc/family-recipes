@@ -51,25 +51,3 @@ export function cronometerLine(name, grams, macros) {
 export function recipesUsing(data, ref) {
   return data.recipes.filter((r) => r.ingredients.some((i) => i.ref === ref))
 }
-
-const CATEGORY_TO_MEAL = {
-  breakfast: 'breakfast',
-  snack: 'snack',
-  dessert: 'snack',
-}
-
-// "33% of lunch" style budget hint for one profile. Subtle — a hint, not a judgment.
-// lunch-dinner recipes are judged against whichever of the two budgets is
-// tighter, so the hint never understates the cost of eating it at dinner.
-export function budgetHint(profile, category, macros) {
-  let meal = CATEGORY_TO_MEAL[category]
-  if (!meal) {
-    const lunch = profile.mealBudgets?.lunch?.kcal ?? Infinity
-    const dinner = profile.mealBudgets?.dinner?.kcal ?? Infinity
-    meal = dinner <= lunch ? 'dinner' : 'lunch'
-  }
-  const budget = profile.mealBudgets?.[meal]
-  if (!budget?.kcal) return null
-  const pct = Math.round((macros.kcal / budget.kcal) * 100)
-  return { name: profile.name, pct, meal }
-}

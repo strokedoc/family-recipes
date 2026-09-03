@@ -11,8 +11,9 @@ how many grams is my portion?"
 - **Writes**: the app commits to that file via the GitHub Contents API with each user's
   fine-grained PAT. Sha-checked writes with recipe-level merge on conflict; offline edits
   queue in localStorage and flush on reconnect.
-- **Profiles**: [`public/data/profiles.json`](public/data/profiles.json) drives the
-  per-person "% of meal budget" hints.
+- **Scheduling**: [`src/lib/scheduler.js`](src/lib/scheduler.js) builds a day in one click —
+  protein is the only hard constraint, and each day is scored against a single baseline
+  target. Both people eat the same portion, so there are no per-person profiles.
 
 Non-developer setup: see [SETUP.md](SETUP.md).
 

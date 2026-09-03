@@ -47,7 +47,7 @@ export default function Settings({ settings, onSave, onBack }) {
       <label className="field">
         <span>Repository (owner/name)</span>
         <input
-          placeholder="e.g. nirav/family-recipes"
+          placeholder="e.g. strokedoc/family-recipes"
           autoCapitalize="none"
           autoCorrect="off"
           value={repo}
