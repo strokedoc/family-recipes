@@ -1,6 +1,14 @@
-// V's Kitchen service worker: offline-first app shell, network-first data.
+// V's Kitchen service worker: network-first shell + data, cached for offline.
+//
+// The HTML shell MUST be network-first. It names the content-hashed JS/CSS
+// bundle, so serving a stale index.html pins the app to an old bundle — a new
+// deploy then needs two reloads to appear, and on an installed iOS PWA that
+// means force-quitting the app. Hashed assets are immutable, so they stay
+// stale-while-revalidate; only the document that points at them is fetched
+// fresh. Offline still works: every network-first path falls back to cache.
+//
 // Bump VERSION to invalidate old caches on deploy.
-const VERSION = 'vs-kitchen-v1'
+const VERSION = 'vs-kitchen-v2'
 
 self.addEventListener('install', (e) => {
   // Precache the shell entry so offline reload works even if the runtime
@@ -25,6 +33,21 @@ self.addEventListener('fetch', (e) => {
 
   // GitHub API: never intercept — sync logic owns its own errors.
   if (url.hostname === 'api.github.com') return
+
+  // The app shell: network-first so a deploy is picked up on the next open,
+  // cache fallback so it still launches offline.
+  if (req.mode === 'navigate' || req.destination === 'document') {
+    e.respondWith(
+      fetch(req)
+        .then((res) => {
+          const copy = res.clone()
+          caches.open(VERSION).then((c) => c.put('./', copy))
+          return res
+        })
+        .catch(() => caches.match('./').then((hit) => hit || caches.match(req))),
+    )
+    return
+  }
 
   // Data files: network-first (freshness), cache fallback (offline reading).
   if (url.pathname.includes('/data/')) {
