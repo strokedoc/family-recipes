@@ -150,6 +150,13 @@ textarea:focus {
   border-radius: 999px;
   padding: 7px 11px;
 }
+/* Queue stuck (error / read-only / offline with edits waiting): make the whole
+   chip read as a problem, not just the dot. */
+.sync-chip.stuck {
+  color: var(--chili-deep);
+  background: #fbe9e2;
+  border-color: var(--chili);
+}
 .sync-dot {
   width: 8px;
   height: 8px;

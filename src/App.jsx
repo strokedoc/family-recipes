@@ -327,10 +327,25 @@ const SYNC_LABEL = {
   error: ['sync-dot error', 'Sync error'],
 }
 
+// What "N pending" means depends on the state. Only 'pending'/'loading' are
+// actually in flight — the rest mean the queue is STUCK, and the chip has to
+// say so rather than reading like a normal sync.
+const PENDING_WORD = {
+  loading: 'pending',
+  ok: 'pending',
+  pending: 'pending',
+  offline: 'offline — not synced',
+  readonly: 'not synced (no token)',
+  error: 'not syncing',
+}
+
 function Header({ nav, setNav, sync, pending, onRetry }) {
   const [dotClass, label] = SYNC_LABEL[sync.state] || SYNC_LABEL.loading
-  // Unsynced edits are never hidden behind a green "Synced" label.
+  // Unsynced edits are never hidden behind a green "Synced" label — and when
+  // the queue is stuck, the chip must name the problem, not just count it.
   const showPending = pending > 0
+  const stuck = showPending && sync.state !== 'pending' && sync.state !== 'loading'
+  const chipText = showPending ? `${pending} ${PENDING_WORD[sync.state] || 'pending'}` : label
   return (
     <header className="header">
       <button className="brand" onClick={() => setNav({ view: 'browse' })}>
@@ -339,13 +354,13 @@ function Header({ nav, setNav, sync, pending, onRetry }) {
       </button>
       <div className="header-right">
         <button
-          className="sync-chip"
+          className={`sync-chip ${stuck ? 'stuck' : ''}`}
           onClick={onRetry}
-          title={sync.detail || label}
-          aria-label={`Sync status: ${label}`}
+          title={sync.detail || (showPending ? `${pending} unsynced edit${pending === 1 ? '' : 's'} — tap to retry` : label)}
+          aria-label={showPending ? `${chipText}, tap to retry` : `Sync status: ${label}`}
         >
           <span className={dotClass} />
-          {showPending ? `${pending} pending` : label}
+          {chipText}
         </button>
         <button
           className={`icon-btn ${nav.view === 'library' ? 'active' : ''}`}
