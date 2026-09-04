@@ -3,6 +3,15 @@ import { perServing, fmt } from '../lib/nutrition.js'
 import IngredientPicker from '../components/IngredientPicker.jsx'
 
 const CATEGORIES = ['breakfast', 'lunch-dinner', 'snack', 'dessert']
+const ROLES = [
+  ['main', 'Main meal'],
+  ['side', 'Side'],
+  ['bread', 'Bread'],
+  ['filler', 'Protein top-up'],
+  ['constant', 'Daily breakfast'],
+  ['dessert', 'Dessert'],
+]
+const PROTEIN_SOURCES = ['besan', 'chickpea', 'dal', 'paneer', 'soya', 'tofu', 'mixed']
 
 function slugify(name) {
   return name
@@ -25,6 +34,8 @@ export default function RecipeEdit({ recipe, data, commit, showToast, onDone, on
           id: '',
           name: '',
           category: 'lunch-dinner',
+          role: 'main',
+          proteinSource: '',
           servings: 2,
           yieldGramsCooked: null,
           ingredients: [],
@@ -83,6 +94,11 @@ export default function RecipeEdit({ recipe, data, commit, showToast, onDone, on
     if (!draft.ingredients.length) return showToast('Add at least one ingredient')
     if (draft.ingredients.some((i) => !(Number(i.grams) > 0)))
       return showToast('Every ingredient needs grams')
+    if (!(Number(draft.servings) > 0)) return showToast('Servings must be greater than zero')
+    if (draft.yieldGramsCooked !== null && !(Number(draft.yieldGramsCooked) > 0))
+      return showToast('Cooked weight must be greater than zero')
+    if (draft.role === 'main' && !draft.proteinSource)
+      return showToast('Choose the main protein source')
     let id = draft.id
     if (isNew) {
       id = slugify(name)
@@ -100,6 +116,7 @@ export default function RecipeEdit({ recipe, data, commit, showToast, onDone, on
       tags: tagsText.split(',').map((t) => t.trim()).filter(Boolean),
       notes: draft.notes?.trim() || undefined,
     }
+    if (clean.role !== 'main' || !clean.proteinSource) delete clean.proteinSource
     if (!clean.notes) delete clean.notes
     commit({ type: 'putRecipe', recipe: clean })
     onDone(id)
@@ -160,6 +177,35 @@ export default function RecipeEdit({ recipe, data, commit, showToast, onDone, on
             onChange={(e) => setField('yieldGramsCooked', e.target.value || null)}
           />
         </label>
+      </div>
+
+      <div className="field-row">
+        <label className="field">
+          <span>Planner use</span>
+          <select value={draft.role || ''} onChange={(e) => setField('role', e.target.value)}>
+            {ROLES.map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </label>
+        {draft.role === 'main' && (
+          <label className="field">
+            <span>Main protein</span>
+            <select
+              value={draft.proteinSource || ''}
+              onChange={(e) => setField('proteinSource', e.target.value)}
+            >
+              <option value="">Choose…</option>
+              {PROTEIN_SOURCES.map((source) => (
+                <option key={source} value={source}>
+                  {source}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
       </div>
 
       <h2 className="section-title">Ingredients</h2>

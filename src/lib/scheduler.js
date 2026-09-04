@@ -1,20 +1,21 @@
 // One-click day builder. See SCHEDULER-PLAN.md.
 //
 // Protein is the ONLY hard constraint. Calories, net carbs and fat are reported
-// against a target so an unbalanced plan is visible while you schedule it — they
-// are never enforced, because hard macro bands make the button fail constantly.
+// and used to prefer a better-balanced valid day, but never enforced — hard
+// macro bands make the button fail constantly.
 // buildDay never throws and never returns nothing: a slightly-off day plus a
 // warning always beats an error.
 
 import { perServing } from './nutrition.js'
 
-// Baseline daily targets. Deliberately the lower of the household's two target
-// sets — hitting these covers both people, and extra calories get added on top
-// at logging time, outside the app. Deliberately unlabelled.
+// Shared-plan baseline: Vruddhi's current Cronometer targets. Harsh adds his
+// extra calories at logging time, outside the app. Deliberately unlabelled in
+// the UI because both people eat the same planned meals.
 export const DAILY_TARGET = {
   kcal: 1500,
-  protein: 130, // the protein bar fills to here...
-  proteinMin: 100, // ...but anything at or above this counts as hit
+  protein: 128, // current Cronometer goal / top of the preferred range
+  proteinAim: 120, // what the builder actively tries to reach
+  proteinMin: 110, // a sustainable day still counts as a hit here
   netCarbs: 135,
   fat: 50,
 }
@@ -126,7 +127,10 @@ function attempt(data, P, M, target, avoid) {
 
   const eaten = [breakfast, ...lunch, ...dinner]
   const base = eaten.reduce((t, r) => sum(t, M(r)), ZERO)
-  const gap = target.proteinMin - base.protein
+  // Build toward the preferred intake, not merely the minimum acceptable day.
+  // This keeps normal results near 120 g while still treating 110–128 g as a
+  // useful, sustainable range rather than a pass/fail prescription.
+  const gap = (target.proteinAim ?? target.protein) - base.protein
   const usedIds = new Set(eaten.map((r) => r.id))
   const fillers = P.filler.filter((r) => !usedIds.has(r.id))
   const filler = gap > 2 ? cheapestThatCloses(fillers, gap, M) : null
@@ -148,6 +152,27 @@ function miss(totals, target) {
   return 0
 }
 
+// Protein decides whether a day is valid. Among valid days, prefer one near
+// the shared calorie baseline and avoid going over the other macro ceilings.
+// Going over calories costs more than leaving room because Harsh can add food;
+// Vruddhi cannot subtract an oversized shared plan.
+function softScore(totals, target) {
+  const netCarbs = totals.carbs - totals.fiber
+  const proteinDistance = Math.abs(totals.protein - (target.proteinAim ?? target.protein)) * 0.25
+  const kcalUnder = Math.max(0, target.kcal - totals.kcal) / 100
+  const kcalOver = Math.max(0, totals.kcal - target.kcal) / 20
+  const carbsOver = Math.max(0, netCarbs - target.netCarbs) / 10
+  const fatOver = Math.max(0, totals.fat - target.fat) / 5
+  return proteinDistance + kcalUnder + kcalOver + carbsOver + fatOver
+}
+
+function better(a, b, target) {
+  if (!b) return true
+  const aMiss = miss(a.totals, target)
+  const bMiss = miss(b.totals, target)
+  return aMiss < bMiss || (aMiss === bMiss && softScore(a.totals, target) < softScore(b.totals, target))
+}
+
 /**
  * Fill one day. Returns { slots, totals, warnings } — always, never throws.
  * slots maps each meal to an array of recipe ids.
@@ -166,16 +191,20 @@ export function buildDay(data, date, opts = {}) {
   }
 
   // Three passes: avoid the last 7 days, then the last 3, then allow anything.
+  // Keep trying relaxed passes when a strict-variety pass only finds a miss.
   let best = null
   for (const days of [opts.lookbackDays ?? 7, 3, 0]) {
     const avoid = days ? recentlyUsed(data, date, days) : new Set()
+    let passBest = null
     for (let i = 0; i < 25; i++) {
       const cand = attempt(data, P, M, target, avoid)
       if (!cand) continue
-      if (miss(cand.totals, target) === 0) return { ...cand, warnings: [] }
-      if (!best || miss(cand.totals, target) < miss(best.totals, target)) best = cand
+      if (better(cand, passBest, target)) passBest = cand
+      if (better(cand, best, target)) best = cand
     }
-    if (best) break
+    // Preserve the strongest available variety rule. Only relax lookback when
+    // this pass cannot produce a protein-valid day at all.
+    if (passBest && miss(passBest.totals, target) === 0) return { ...passBest, warnings: [] }
   }
 
   if (!best) {

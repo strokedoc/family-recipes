@@ -14,6 +14,9 @@ how many grams is my portion?"
 - **Scheduling**: [`src/lib/scheduler.js`](src/lib/scheduler.js) builds a day in one click —
   protein is the only hard constraint, and each day is scored against a single baseline
   target. Both people eat the same portion, so there are no per-person profiles.
+- **Balance today**: the Schedule screen accepts Vruddhi's current calories, protein, net carbs,
+  and fat, then ranks recipes by how well one serving fits the remaining 1,500 kcal / 128 g
+  baseline. These temporary totals stay in that device's local storage and are never synced.
 
 Non-developer setup: see [SETUP.md](SETUP.md).
 

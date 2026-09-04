@@ -4,6 +4,7 @@ import {
   MEALS,
   MEAL_LABELS,
   slotIds,
+  toISODate,
   weekStartOf,
   weekDates,
   addDays,
@@ -13,10 +14,27 @@ import {
   autoFillWeek,
 } from '../lib/planner.js'
 import { buildDay, dayTotals, dayBars, swapOptions, DAILY_TARGET } from '../lib/scheduler.js'
+import { balanceRecipes } from '../lib/balancer.js'
 import { applyOp } from '../lib/store.js'
+
+const emptyMacros = () => ({ kcal: '', protein: '', netCarbs: '', fat: '' })
+const TODAY_MACROS_KEY = 'rasoi.macros.today'
+
+function loadTodayMacros(date) {
+  try {
+    const saved = JSON.parse(localStorage.getItem(TODAY_MACROS_KEY))
+    return saved?.date === date ? saved.macros : emptyMacros()
+  } catch {
+    return emptyMacros()
+  }
+}
 
 export default function Schedule({ data, commit, openRecipe, showToast }) {
   const [weekStart, setWeekStart] = useState(() => weekStartOf())
+  const today = toISODate(new Date())
+  const [balancerOpen, setBalancerOpen] = useState(false)
+  const [todayMacros, setTodayMacros] = useState(() => loadTodayMacros(today))
+  const [showSuggestions, setShowSuggestions] = useState(false)
   // sheet: null | {mode:'single'|'add', date, meal} | {mode:'multi'}
   //             | {mode:'move', date, meal} | {mode:'swap', date, meal, recipeId}
   const [sheet, setSheet] = useState(null)
@@ -33,7 +51,12 @@ export default function Schedule({ data, commit, openRecipe, showToast }) {
   }
 
   function addToSlot(date, meal, id) {
-    setSlot(date, meal, [...slotIds(data.schedule?.[date]?.[meal]), id])
+    const current = slotIds(data.schedule?.[date]?.[meal])
+    if (current.includes(id)) {
+      setSheet(null)
+      return showToast?.('That recipe is already in this meal.')
+    }
+    setSlot(date, meal, [...current, id])
   }
 
   function removeFromSlot(date, meal, id) {
@@ -68,21 +91,30 @@ export default function Schedule({ data, commit, openRecipe, showToast }) {
   function fillWeek() {
     let working = data
     let placed = 0
+    let empty = 0
+    let failed = 0
     const warned = []
     for (const date of dates) {
       if (!MEALS.every((m) => slotIds(working.schedule?.[date]?.[m]).length === 0)) continue
+      empty++
       const { slots, warnings } = buildDay(working, date)
-      if (!slots.lunch.length) continue
+      if (!slots.lunch.length) {
+        failed++
+        continue
+      }
       const op = { type: 'setDay', date, slots }
       commit(op)
       working = applyOp(working, op)
       placed++
       if (warnings.length) warned.push(dayLabel(date).weekday)
     }
-    if (!placed) return showToast?.('Every day this week already has something scheduled.')
+    if (!empty) return showToast?.('Every day this week already has something scheduled.')
+    if (!placed) return showToast?.('Could not build a day with the current planner recipes.')
     showToast?.(
       warned.length
-        ? `Filled ${placed} day${placed === 1 ? '' : 's'} — ${warned.join(', ')} came up short on protein.`
+        ? `Filled ${placed} day${placed === 1 ? '' : 's'} — ${warned.join(', ')} fell outside the protein range.`
+        : failed
+          ? `Filled ${placed} day${placed === 1 ? '' : 's'}; ${failed} could not be built.`
         : `Filled ${placed} day${placed === 1 ? '' : 's'}.`,
     )
   }
@@ -138,6 +170,18 @@ export default function Schedule({ data, commit, openRecipe, showToast }) {
           ›
         </button>
       </div>
+
+      <MacroBalancer
+        date={today}
+        open={balancerOpen}
+        setOpen={setBalancerOpen}
+        macros={todayMacros}
+        setMacros={setTodayMacros}
+        showSuggestions={showSuggestions}
+        setShowSuggestions={setShowSuggestions}
+        data={data}
+        openRecipe={openRecipe}
+      />
 
       <div className="plan-bar">
         <button className="autofill-btn" onClick={fillWeek}>
@@ -316,6 +360,118 @@ export default function Schedule({ data, commit, openRecipe, showToast }) {
   )
 }
 
+function MacroBalancer({
+  date,
+  open,
+  setOpen,
+  macros,
+  setMacros,
+  showSuggestions,
+  setShowSuggestions,
+  data,
+  openRecipe,
+}) {
+  const suggestions = showSuggestions ? balanceRecipes(data, macros) : []
+  const protein = Number(macros.protein) || 0
+
+  function update(key, value) {
+    const next = { ...macros, [key]: value }
+    setMacros(next)
+    localStorage.setItem(TODAY_MACROS_KEY, JSON.stringify({ date, macros: next }))
+  }
+
+  function clear() {
+    const next = emptyMacros()
+    setMacros(next)
+    setShowSuggestions(false)
+    localStorage.removeItem(TODAY_MACROS_KEY)
+  }
+
+  return (
+    <section className={`macro-balancer ${open ? 'open' : ''}`}>
+      <button
+        className="balancer-toggle"
+        onClick={() => setOpen((value) => !value)}
+        aria-expanded={open}
+      >
+        <span>
+          <strong>Balance today</strong>
+          <small>Enter Vruddhi's totals so far</small>
+        </span>
+        <span aria-hidden="true">{open ? '−' : '+'}</span>
+      </button>
+
+      {open && (
+        <div className="balancer-body">
+          <div className="macro-entry-grid">
+            {[
+              ['kcal', 'Calories'],
+              ['protein', 'Protein (g)'],
+              ['netCarbs', 'Net carbs (g)'],
+              ['fat', 'Fat (g)'],
+            ].map(([key, label]) => (
+              <label key={key}>
+                <span>{label}</span>
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  min="0"
+                  step="1"
+                  value={macros[key]}
+                  onChange={(event) => update(key, event.target.value)}
+                />
+              </label>
+            ))}
+          </div>
+          <p className="balancer-privacy">
+            Saved only on this device—not added to the shared recipe file.
+          </p>
+          <div className="balancer-actions">
+            <button className="primary-btn" onClick={() => setShowSuggestions(true)}>
+              Find best fits
+            </button>
+            <button className="link-btn" onClick={clear}>
+              Clear
+            </button>
+          </div>
+
+          {showSuggestions && (
+            <div className="suggestion-list">
+              <p className="suggestion-summary">
+                {protein >= DAILY_TARGET.proteinMin
+                  ? 'Protein is already in the good range. Best fits within the remaining macros:'
+                  : `Best one-serving fits toward ${DAILY_TARGET.kcal} kcal and ${DAILY_TARGET.proteinAim}–${DAILY_TARGET.protein} g protein:`}
+              </p>
+              {suggestions.map((item, index) => (
+                <button
+                  key={item.recipe.id}
+                  className="suggestion-card"
+                  onClick={() => openRecipe(item.recipe.id)}
+                >
+                  <span className="suggestion-topline">
+                    <strong>{item.recipe.name}</strong>
+                    {index === 0 && <small>Best fit</small>}
+                  </span>
+                  <span className="suggestion-adds">
+                    Adds {Math.round(item.macros.kcal)} kcal · {Math.round(item.macros.protein)} g protein
+                  </span>
+                  <span className="suggestion-after">
+                    After: {Math.round(item.after.kcal)}/{DAILY_TARGET.kcal} kcal ·{' '}
+                    {Math.round(item.after.protein)}/{DAILY_TARGET.protein} g protein ·{' '}
+                    {Math.round(item.after.netCarbs)}/{DAILY_TARGET.netCarbs} g net carbs ·{' '}
+                    {Math.round(item.after.fat)}/{DAILY_TARGET.fat} g fat
+                  </span>
+                </button>
+              ))}
+              <p className="balancer-privacy">Tap a suggestion to open the recipe.</p>
+            </div>
+          )}
+        </div>
+      )}
+    </section>
+  )
+}
+
 function fmtDelta(n) {
   const v = Math.round(n)
   return v > 0 ? `+${v}` : `${v}`
@@ -345,7 +501,10 @@ function DayBars({ totals }) {
           </div>
         )
       })}
-      <p className="bars-note">Daily target · protein to reach, the rest are ceilings</p>
+      <p className="bars-note">
+        Shared baseline · {DAILY_TARGET.proteinMin} g protein is good, aim for{' '}
+        {DAILY_TARGET.proteinAim}–{DAILY_TARGET.protein} g
+      </p>
     </div>
   )
 }

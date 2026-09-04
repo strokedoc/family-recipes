@@ -40,7 +40,15 @@ export default function App() {
   useEffect(() => {
     let alive = true
     fetchLocalData()
-      .then((d) => alive && setData((cur) => cur || d))
+      .then((d) => {
+        if (!alive) return
+        // The bundled file is only the base copy. Reapply queued edits even
+        // when no GitHub repo/token is configured so a refresh never appears
+        // to discard changes that are still safely waiting on this device.
+        let merged = d
+        for (const op of loadQueue()) merged = applyOp(merged, op)
+        setData((cur) => cur || merged)
+      })
       .catch(() => alive && setSync({ state: 'error', detail: 'Could not load recipes' }))
     const s = loadSettings()
     if (s.repo) {

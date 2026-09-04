@@ -54,6 +54,17 @@ export function applyOp(data, op) {
     else next.recipes.push(recipe)
   } else if (op.type === 'deleteRecipe') {
     next.recipes = next.recipes.filter((r) => r.id !== op.id)
+    // A deleted recipe must not linger as a broken chip in future schedules.
+    next.schedule = { ...(data.schedule || {}) }
+    for (const [date, savedDay] of Object.entries(next.schedule)) {
+      const day = {}
+      for (const [meal, value] of Object.entries(savedDay)) {
+        const ids = (Array.isArray(value) ? value : [value]).filter((id) => id && id !== op.id)
+        if (ids.length) day[meal] = ids
+      }
+      if (Object.keys(day).length) next.schedule[date] = day
+      else delete next.schedule[date]
+    }
   } else if (op.type === 'putIngredient') {
     next.ingredients[op.key] = op.ingredient
   } else if (op.type === 'deleteIngredient') {

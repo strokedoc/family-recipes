@@ -779,6 +779,130 @@ textarea:focus {
 }
 
 /* ── schedule ── */
+.macro-balancer {
+  margin-bottom: 12px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.macro-balancer.open {
+  border-color: var(--turmeric);
+}
+.balancer-toggle {
+  width: 100%;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  color: var(--chili-deep);
+}
+.balancer-toggle > span:first-child {
+  display: flex;
+  flex-direction: column;
+}
+.balancer-toggle strong {
+  font-size: 15px;
+}
+.balancer-toggle small {
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 500;
+}
+.balancer-toggle > span:last-child {
+  font-size: 22px;
+  line-height: 1;
+}
+.balancer-body {
+  padding: 0 14px 14px;
+  border-top: 1px solid var(--line);
+}
+.macro-entry-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 9px;
+  padding-top: 12px;
+}
+.macro-entry-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.macro-entry-grid label > span {
+  color: var(--ink-soft);
+  font-size: 11.5px;
+  font-weight: 700;
+}
+.macro-entry-grid input {
+  padding: 9px 10px;
+  font-variant-numeric: tabular-nums;
+}
+.balancer-privacy {
+  margin-top: 8px;
+  color: var(--ink-soft);
+  font-size: 11.5px;
+}
+.balancer-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+.balancer-actions .primary-btn {
+  padding: 10px 14px;
+  font-size: 14px;
+}
+.suggestion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line);
+}
+.suggestion-summary {
+  color: var(--ink-soft);
+  font-size: 12.5px;
+  margin-bottom: 1px;
+}
+.suggestion-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 11px;
+  border-radius: 10px;
+  background: var(--paper-deep);
+  text-align: left;
+}
+.suggestion-card:active {
+  background: var(--turmeric-soft);
+}
+.suggestion-topline {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.suggestion-topline small {
+  flex-shrink: 0;
+  color: var(--methi);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.suggestion-adds {
+  color: var(--methi);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+.suggestion-after {
+  color: var(--ink-soft);
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+}
 .day-list {
   display: flex;
   flex-direction: column;
