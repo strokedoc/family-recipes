@@ -80,6 +80,11 @@ Never present a macro figure to Harsh that you have not reconciled this way.
 
 When a recipe changes, update the existing entry in `recipes.json` in place rather than
 accumulating near-duplicates. Cronometer has no recipe-edit tool, so a changed recipe means a new
-Cronometer recipe — name it `v2`, `v3`, … , say clearly in your reply which ids are superseded, and
-remove the superseded **diary entries** yourself (`remove_food_entry`). Deleting the orphaned
-custom foods/recipes is manual; list the ids for Harsh rather than leaving him to find them.
+Cronometer recipe — name it `v2`, `v3`, … , and remove the superseded **diary entries** yourself
+(`remove_food_entry`).
+
+Deleting the orphaned custom foods/recipes is manual. **Always identify them by their exact name,
+never by food id** — Harsh works in the Cronometer app, where ids are not visible. Say which
+account each is in, whether it lives under Custom Foods or Recipes, and name the one item to keep.
+If two objects share a name, say so explicitly and give him something visible to tell them apart.
+This applies to anything you ask him to act on by hand: give the label he can actually see.
