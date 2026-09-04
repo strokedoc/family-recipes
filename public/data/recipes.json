@@ -1728,7 +1728,7 @@
         "dairy"
       ],
       "fresh": true,
-      "note": "Values from USDA skim milk (Cronometer food id 168, 245 g/cup). Log it as that entry. Do NOT use Cronometer's branded 'Nature's Promise, Organic, Fat Free Milk' (id 75460528): its Cup measure is defined as 100 g and its per-100g values are per-cup label values, so 120 g counts as 1.2 cups instead of 0.5 cup."
+      "note": "Values from USDA skim milk (Cronometer food id 168, true grams, 245 g/cup). Log it as that entry. Cronometer's branded 'Nature's Promise, Organic, Fat Free Milk' (id 75460528) has a correct 240 ml cup, but its gram unit is rescaled (~0.417 per ml, so 100 units = 1 cup and per-100-unit nutrition is one cup's label). Its per-cup nutrition is fine; only gram quantities are wrong, over-counting ~2.4x. Log that entry by the Cup measure or not at all."
     },
     "tahini": {
       "name": "Tahini (sesame paste)",

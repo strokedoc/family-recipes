@@ -26,30 +26,40 @@ If an ingredient is missing, add *the ingredient* and still build *the dish* as 
 
 ## Validate every Cronometer food entry before you use it
 
-Cronometer's branded database contains entries where the label's **per-serving** values were
-entered on a **per-100 g** basis, and/or a named measure has a fabricated gram weight. Using one
+Some Cronometer entries do not express quantities in real grams. Their nutrition per serving is
+correct, but the gram scale underneath it is not physical — so passing a real gram weight
 silently multiplies that ingredient.
 
-Before putting a food id into a recipe, check `get_food_details` and sanity-check two things:
+Before putting a food id into a recipe, call `get_food_details` and check the **unit scale**, not
+just the macros:
 
-- **The measures.** Does "1 cup" of a liquid weigh ~240 g? Does "1 tbsp" weigh ~15 g? A cup
-  defined as 100 g is a red flag.
-- **The per-100 g macros.** `get_food_details` returns values **per 100 g**. Skim milk is ~34 kcal,
-  Greek yogurt ~59, nut butter ~550–600, whey ~400. If a food reads like its label panel
-  (80 kcal / 8 g protein for milk), the entry is per-serving and must not be used.
+- **Derive the implied density from the small measures.** For a liquid, `ml` should be ~1 g and
+  `tbsp` ~15 g; for milk specifically ~1.03 g/ml. If `ml` comes back as 0.42 g, the entry's "gram"
+  is not a gram and gram-based quantities will be wrong by that factor.
+- **Cross-check the measures against each other.** They should be internally consistent with a
+  real density (cup ≈ 240 ml ≈ 245 g for milk, L ≈ 1030 g).
+- **Sanity-check per-100 g macros.** `get_food_details` returns values per 100 g. Skim milk ~34 kcal,
+  Greek yogurt ~59, nut butter ~550–600, whey ~400. A milk entry reading 80 kcal / 8 g protein per
+  100 g is reporting a per-cup label panel on a rescaled basis.
 
-**Known-bad entries — do not use:**
+**Entries with a non-gram scale:**
 
 | Food | id | Problem |
 |---|---|---|
-| Nature's Promise, Organic, Fat Free Milk | 75460528 | "Cup" = 100 g; per-100 g values are per-cup label values. 120 g logs as 1.2 cups instead of 0.5 cup. Use USDA id **168** (skim milk, 245 g/cup, 34 kcal/100 g) instead. |
+| Nature's Promise, Organic, Fat Free Milk | 75460528 | Its cup is **240 ml** (correct), but the entry's gram unit is rescaled to ~0.417 per ml, so 100 units = 1 cup and per-100-unit nutrition = one cup's label (80 kcal / 8 g protein). Its per-cup nutrition is fine; only **gram** quantities are wrong, over-counting ~2.4×. Passing 120 g logged 1.2 cups instead of 0.5 cup. Either log it by the Cup measure, or use USDA id **168** (skim milk, true grams, 245 g/cup, 34 kcal/100 g). |
 
 ## Never pass `serving_grams` to `add_recipe`
 
-Let Cronometer compute the batch weight from the ingredients. If the `serving_grams` you declare
-disagrees with Cronometer's own total, **every nutrient is scaled by the ratio** — a uniform,
-easy-to-miss error. This happened on 2026-09-04: a declared 424.6 g against a 304.6 g batch
-inflated the whole smoothie by 1.394×, reporting 741 kcal for a 476 kcal drink.
+Let Cronometer compute the batch weight from the ingredients. Declaring your own `serving_grams`
+risks a uniform, easy-to-miss scaling of **every** nutrient.
+
+Observed on 2026-09-04: a recipe built with `serving_grams=424.6` came back with all six macros
+inflated by the same factor, 1.394× — 741 kcal for what is really a 476 kcal drink. The uniform
+ratio (fiber included, where the suspect ingredient contributes none) proves it was a
+weight/serving problem rather than one bad ingredient. `[unverified]` The specific cause was most
+likely Cronometer computing a smaller batch weight than the declared one, but that was inferred
+from the ratio, not measured — do not repeat it as established fact. The rule holds regardless of
+mechanism, and the verify step below catches it either way.
 
 To log it: use the `food_id` and `measure_id` returned by `add_recipe`, with `grams` equal to the
 returned `total_grams` (one full batch).
