@@ -17,6 +17,7 @@ Applies to both Cronometer accounts (Harsh = account A, Vruddhi = account B) unl
 | Ghee | Homemade ghee, made from Kerrygold Unsalted Pure Irish Butter | Home-rendered; nutrition ≈ generic ghee / clarified butter (~112 kcal/tbsp, pure fat). Log as ghee, not butter |
 | Tofu / firm tofu | Nasoya Organic Super Firm Tofu | Super-firm (denser, higher protein than firm/extra-firm) |
 | Ajwain / carom seeds | Pride of India Ajwain Seed (Whole, Organic) | Cronometer food id 25866761 ("Pride Of India, Ajwain Seed Whole Organic Spices"). NOT mustard seed — Cronometer's fuzzy import matched "ajwain" to Mustard Seed (id 450516) once; always pick 25866761 |
+| Fat-free / skim milk | Nature's Promise Organic Fat Free Milk | **Log as USDA "Milk, Nonfat, Fluid, with Added Vitamin A and Vitamin D" — Cronometer food id 168** (245 g/cup, 34 kcal/100 g). Do NOT use the branded entry id 75460528: its "Cup" measure is 100 g and its per-100 g values are per-cup label values, so 120 g counts as 1.2 cups instead of 0.5 cup (per Harsh, 2026-09-04) |
 
 ## How to extend this list
 

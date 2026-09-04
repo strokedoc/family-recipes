@@ -1714,6 +1714,48 @@
         "drink"
       ],
       "note": "1 bottle = 340 g = 150 kcal / 30 g protein. Confirmed 2026-09-03."
+    },
+    "milk-fatfree-natures-promise": {
+      "name": "Fat-free (skim) milk — Nature's Promise Organic",
+      "per100g": {
+        "kcal": 34,
+        "protein": 3.37,
+        "carbs": 4.96,
+        "fat": 0.08,
+        "fiber": 0
+      },
+      "tags": [
+        "dairy"
+      ],
+      "fresh": true,
+      "note": "Values from USDA skim milk (Cronometer food id 168, 245 g/cup). Log it as that entry. Do NOT use Cronometer's branded 'Nature's Promise, Organic, Fat Free Milk' (id 75460528): its Cup measure is defined as 100 g and its per-100g values are per-cup label values, so 120 g counts as 1.2 cups instead of 0.5 cup."
+    },
+    "tahini": {
+      "name": "Tahini (sesame paste)",
+      "per100g": {
+        "kcal": 595,
+        "protein": 17,
+        "carbs": 21,
+        "fat": 54,
+        "fiber": 9.3
+      },
+      "tags": [
+        "fat",
+        "seed"
+      ]
+    },
+    "amaranth-popped": {
+      "name": "Amaranth, popped/puffed",
+      "per100g": {
+        "kcal": 380,
+        "protein": 14,
+        "carbs": 65,
+        "fat": 7,
+        "fiber": 7
+      },
+      "tags": [
+        "grain"
+      ]
     }
   },
   "recipes": [
@@ -3126,6 +3168,84 @@
       "notes": "Imported from Cronometer recipe #81102418. Strawberries and cocoa removed and NuttZo raised to 1 tbsp on 2026-09-03 (household does not add berries/cocoa). Recompute from ingredients ≈ 427 kcal / 44 g protein / 29 g carbs / 16 g fat / 5.4 g fiber per serving (418 g); recalibrate against Cronometer once the saved recipe there is updated.",
       "source": "cronometer-import-2026-08-31",
       "updatedAt": "2026-09-03T00:00:00Z",
+      "role": "constant"
+    },
+    {
+      "id": "protein-smoothie-loaded",
+      "name": "Protein smoothie — loaded (fat-free milk, nuts + seeds)",
+      "category": "breakfast",
+      "servings": 1,
+      "yieldGramsCooked": null,
+      "ingredients": [
+        {
+          "ref": "dragon-fruit-blend",
+          "grams": 113,
+          "note": "1/2 bag"
+        },
+        {
+          "ref": "fage-0",
+          "grams": 122,
+          "note": "1/2 cup"
+        },
+        {
+          "ref": "milk-fatfree-natures-promise",
+          "grams": 120,
+          "note": "1/2 cup — swapped in for almond milk"
+        },
+        {
+          "ref": "chia",
+          "grams": 5,
+          "note": "1/2 tbsp"
+        },
+        {
+          "ref": "hemp-hearts",
+          "grams": 5,
+          "note": "1/2 tbsp"
+        },
+        {
+          "ref": "nut-seed-butter",
+          "grams": 8,
+          "note": "1/2 tbsp NuttZo — halved 2026-09-04 to cut calories"
+        },
+        {
+          "ref": "whey-levels",
+          "grams": 32,
+          "note": "1 scoop"
+        },
+        {
+          "ref": "creatine",
+          "grams": 5,
+          "note": "1 scoop — non-caloric"
+        },
+        {
+          "ref": "almonds",
+          "grams": 9,
+          "note": "1 tbsp, soaked"
+        },
+        {
+          "ref": "amaranth-popped",
+          "grams": 3,
+          "note": "1 tbsp popped"
+        },
+        {
+          "ref": "cinnamon",
+          "grams": 2.6,
+          "note": "1 tsp"
+        }
+      ],
+      "steps": [
+        "Blend everything with ice/water.",
+        "Loaded sibling of Protein smoothie — fat-free dairy milk instead of almond milk, plus soaked almonds, popped amaranth and cinnamon, with a half-dose of NuttZo."
+      ],
+      "tags": [
+        "no-cook",
+        "high-protein",
+        "daily-constant",
+        "post-workout"
+      ],
+      "notes": "Derived from protein-smoothie; trimmed 2026-09-04 to cut calories without losing protein: dropped tahini, coconut and walnuts, halved NuttZo (16 g -> 8 g), kept soaked almonds, popped amaranth, cinnamon and the fat-free-milk swap. Built as a real Cronometer recipe from database ingredients in both accounts and verified against Cronometer's own engine on 2026-09-04: 476.4 kcal / 48.6 g protein / 39.0 g carbs / 16.3 g fat / 7.5 g fiber per serving (424.6 g). Local per100g computation agrees to within rounding.",
+      "source": "derived-from-protein-smoothie",
+      "updatedAt": "2026-09-04T00:00:00Z",
       "role": "constant"
     },
     {
