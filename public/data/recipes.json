@@ -868,6 +868,20 @@
         "sweetener"
       ]
     },
+    "turbinado-sugar": {
+      "name": "Turbinado sugar (Sugar In The Raw)",
+      "per100g": {
+        "kcal": 387,
+        "protein": 0,
+        "carbs": 99.98,
+        "fat": 0,
+        "fiber": 0
+      },
+      "tags": [
+        "sweetener"
+      ],
+      "note": "Household product: Sugar In The Raw. Nutrition uses NCCDB Turbinado Sugar food id 455706 to avoid branded-label rounding distortion."
+    },
     "honey": {
       "name": "Honey",
       "per100g": {
@@ -3904,6 +3918,57 @@
       "notes": "Afternoon protein filler. ~150 kcal / 30 g protein per bottle. Label numbers confirmed by Harsh 2026-09-03.",
       "source": "harsh-2026-09-03",
       "updatedAt": "2026-09-03T00:00:00Z",
+      "role": "filler"
+    },
+    {
+      "id": "sooji-halva",
+      "name": "Sooji halva",
+      "category": "dessert",
+      "servings": 10.4,
+      "yieldGramsCooked": 520,
+      "ingredients": [
+        {
+          "ref": "ghee",
+          "grams": 104,
+          "note": "1/2 cup; 8 tbsp"
+        },
+        {
+          "ref": "raisins",
+          "grams": 12,
+          "note": "dried"
+        },
+        {
+          "ref": "almonds",
+          "grams": 17,
+          "note": "chopped"
+        },
+        {
+          "ref": "rava-sooji",
+          "grams": 100
+        },
+        {
+          "ref": "atta",
+          "grams": 15,
+          "note": "2 tbsp whole-wheat flour"
+        },
+        {
+          "ref": "turbinado-sugar",
+          "grams": 96,
+          "note": "1/2 cup Sugar In The Raw"
+        }
+      ],
+      "steps": [
+        "Roast the sooji and whole-wheat flour in the ghee until aromatic; add the almonds and raisins.",
+        "Add the turbinado sugar and hot water gradually, stirring until absorbed and the halva is cooked through.",
+        "Weigh the finished batch at 520 g. Portion in 50 g servings."
+      ],
+      "tags": [
+        "indian",
+        "dessert"
+      ],
+      "notes": "Measured cooked yield 520 g; 1 serving = 50 g and the batch makes 10.4 servings. Volume conversions: 1/2 cup ghee = 104 g, 2 tbsp whole-wheat flour = 15 g, and 1/2 cup turbinado sugar = 96 g. App estimate per 50 g serving ≈ 178 kcal / 1.7 g protein / 18.6 g carbs / 11.0 g fat / 0.8 g fiber.",
+      "source": "harsh-2026-09-05",
+      "updatedAt": "2026-09-05T00:00:00Z",
       "role": "filler"
     }
   ],
