@@ -28,6 +28,7 @@ export const PLATE_MIN_PROTEIN = 20
 export const SLOT_ORDER = ['breakfast', 'lunch', 'dinner', 'snack']
 
 const ZERO = { kcal: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 }
+const EMPTY = new Set()
 const MACROS = ['kcal', 'protein', 'carbs', 'fat', 'fiber']
 
 function sum(a, b) {
@@ -84,11 +85,13 @@ function cheapestThatCloses(candidates, gap, M) {
 }
 
 // Build one lunch/dinner plate: a main, plus a side kick if the main alone is
-// short of the floor. Returns null if even the best side can't lift it.
-function buildPlate(main, sides, M) {
+// short of the floor. `taken` holds ids already on the day's other plate — a
+// recipe never appears twice in one day, so the second plate has to reach for a
+// different kick. Returns null if no remaining side can lift it.
+function buildPlate(main, sides, M, taken = EMPTY) {
   const p = M(main).protein
   if (p >= PLATE_MIN_PROTEIN) return [main]
-  const kick = cheapestThatCloses(sides, PLATE_MIN_PROTEIN - p, M)
+  const kick = cheapestThatCloses(sides.filter((r) => !taken.has(r.id)), PLATE_MIN_PROTEIN - p, M)
   if (!kick) return null
   if (p + M(kick).protein < PLATE_MIN_PROTEIN) return null
   return [main, kick]
@@ -115,7 +118,7 @@ function attempt(data, P, M, target, avoid) {
       if (b.id === a.id) continue
       // Don't serve the same protein source twice in one day.
       if (a.proteinSource && a.proteinSource === b.proteinSource) continue
-      const pb = buildPlate(b, sides, M)
+      const pb = buildPlate(b, sides, M, new Set(pa.map((r) => r.id)))
       if (!pb) continue
       lunch = pa
       dinner = pb

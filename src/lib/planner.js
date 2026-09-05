@@ -100,15 +100,26 @@ export function autoFillWeek(data, weekStart, recipeIds) {
   const anyEmpty = shuffle(MEALS.flatMap((m) => emptyByMeal[m]))
 
   const taken = new Set()
-  const free = (s) => s && !taken.has(`${s.date}|${s.meal}`)
+  // A recipe is never placed on a day that already serves it — lunch and dinner
+  // should not be the same dish. Repeats across the week are fine.
+  const onDay = new Map()
+  const dayHas = (date, id) => {
+    if (!onDay.has(date)) {
+      const day = schedule[date] || {}
+      onDay.set(date, new Set(MEALS.flatMap((m) => slotIds(day[m]))))
+    }
+    return onDay.get(date).has(id)
+  }
   const ops = []
   for (const id of shuffle(recipeIds)) {
     const recipe = data.recipes.find((r) => r.id === id)
     const prefer = CATEGORY_MEALS[recipe?.category] || []
+    const free = (s) => s && !taken.has(`${s.date}|${s.meal}`) && !dayHas(s.date, id)
     const slot =
       prefer.flatMap((m) => emptyByMeal[m]).find(free) || anyEmpty.find(free)
-    if (!slot) break
+    if (!slot) continue
     taken.add(`${slot.date}|${slot.meal}`)
+    onDay.get(slot.date).add(id)
     ops.push({ date: slot.date, meal: slot.meal, recipeId: id })
   }
   return { ops, placed: ops.length, skipped: recipeIds.length - ops.length }

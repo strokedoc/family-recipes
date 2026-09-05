@@ -4,6 +4,7 @@ import { buildDay, dayBars, DAILY_TARGET, PLATE_MIN_PROTEIN } from '../src/lib/s
 import { balanceRecipes } from '../src/lib/balancer.js'
 import { perServing } from '../src/lib/nutrition.js'
 import { applyOp } from '../src/lib/store.js'
+import { autoFillWeek, MEALS, slotIds } from '../src/lib/planner.js'
 
 const data = JSON.parse(readFileSync(new URL('../public/data/recipes.json', import.meta.url)))
 let failures = 0
@@ -23,6 +24,7 @@ Math.random = () => {
 const proteinResults = []
 let validPlates = true
 let distinctSources = true
+let noRepeatWithinDay = true
 let warned = false
 for (let i = 0; i < 1000; i++) {
   const result = buildDay(data, '2026-09-04')
@@ -42,6 +44,10 @@ for (let i = 0; i < 1000; i++) {
     .map((id) => data.recipes.find((r) => r.id === id))
     .find((r) => r.role === 'main')
   distinctSources &&= lunchMain.proteinSource !== dinnerMain.proteinSource
+  // Nothing is served twice in one day — a side kick at lunch must not come
+  // back at dinner. Repeats across the week are fine.
+  const dayIds = ['breakfast', 'lunch', 'dinner', 'snack'].flatMap((m) => result.slots[m])
+  noRepeatWithinDay &&= new Set(dayIds).size === dayIds.length
 }
 
 check(
@@ -52,6 +58,7 @@ check('T1 generated days build toward 120 g', proteinResults.every((p) => p >= D
 check('T1 generated days need no warnings', !warned)
 check('T1 lunch and dinner clear the plate floor', validPlates)
 check('T1 lunch and dinner use different protein sources', distinctSources)
+check('T1 no recipe is served twice in one day', noRepeatWithinDay)
 
 const under = dayBars({ kcal: 0, protein: 109.9, carbs: 0, fat: 0, fiber: 0 })[0]
 const good = dayBars({ kcal: 0, protein: 110, carbs: 0, fat: 0, fiber: 0 })[0]
@@ -142,6 +149,32 @@ check(
   nearlyFull.after.kcal <= DAILY_TARGET.kcal + 20 &&
     nearlyFull.after.protein >= DAILY_TARGET.proteinAim,
 )
+
+// T6 "Add specific" must not drop a recipe into a day that already serves it.
+const weekStart = '2026-08-31'
+const busyWeek = { ...data, schedule: {} }
+for (let i = 0; i < 7; i++) {
+  const d = `2026-0${i < 1 ? '8-31' : `9-0${i}`}`
+  busyWeek.schedule[d] = { breakfast: ['x'], lunch: ['x'], dinner: ['x'], snack: ['x'] }
+}
+busyWeek.schedule['2026-09-01'].lunch = ['chhaas']
+busyWeek.schedule['2026-09-01'].dinner = [] // the only empty slot in the week
+check('T6 add-specific skips a day that already serves that recipe',
+  autoFillWeek(busyWeek, weekStart, ['chhaas']).ops.length === 0)
+check('T6 add-specific still places the other picks',
+  autoFillWeek(busyWeek, weekStart, ['chhaas', 'cucumber-raita']).ops
+    .every((op) => op.recipeId === 'cucumber-raita'))
+
+// A whole week built day by day still holds the within-day rule.
+let weekClean = true
+const built = { ...data, schedule: {} }
+for (let i = 0; i < 7; i++) {
+  const d = `2026-0${i < 1 ? '8-31' : `9-0${i}`}`
+  built.schedule[d] = buildDay(built, d).slots
+  const ids = MEALS.flatMap((m) => slotIds(built.schedule[d][m]))
+  weekClean &&= new Set(ids).size === ids.length
+}
+check('T6 a week built day by day repeats nothing within a day', weekClean)
 
 Math.random = realRandom
 process.exit(failures ? 1 : 0)

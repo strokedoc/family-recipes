@@ -1,12 +1,12 @@
 import React, { useMemo, useState } from 'react'
-import { buildGroceryList, weekStartOf, addDays, weekRangeLabel } from '../lib/planner.js'
+import { buildGroceryList, addDays, weekStartOf } from '../lib/planner.js'
+import Icon from '../components/Icon.jsx'
 
 function makeId() {
   return `x${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`
 }
 
-export default function Grocery({ data, commit }) {
-  const [weekStart, setWeekStart] = useState(() => weekStartOf())
+export default function Grocery({ data, commit, weekStart, setWeekStart }) {
   const [text, setText] = useState('')
   const thisWeek = weekStartOf()
 
@@ -42,60 +42,74 @@ export default function Grocery({ data, commit }) {
     save(items, extra.filter((e) => e.id !== id))
   }
 
-  const isEmpty = items.length === 0 && extra.length === 0
+  const all = [...items, ...extra]
+  const picked = all.filter((i) => i.checked).length
+  const isEmpty = all.length === 0
 
   return (
     <div className="grocery">
+      {/* The header names the week; these only step it. */}
       <div className="week-nav">
-        <button
-          className="icon-btn"
-          onClick={() => setWeekStart((w) => addDays(w, -7))}
-          aria-label="Previous week"
-        >
+        <button className="icon-btn press" onClick={() => setWeekStart(addDays(weekStart, -7))} aria-label="Previous week">
           ‹
         </button>
-        <div className="week-label-wrap">
-          <span className="week-label">{weekRangeLabel(weekStart)}</span>
-          {weekStart !== thisWeek && (
-            <button className="link-btn today-btn" onClick={() => setWeekStart(thisWeek)}>
-              This week
-            </button>
-          )}
-        </div>
-        <button
-          className="icon-btn"
-          onClick={() => setWeekStart((w) => addDays(w, 7))}
-          aria-label="Next week"
-        >
+        <button className="icon-btn press" onClick={() => setWeekStart(addDays(weekStart, 7))} aria-label="Next week">
           ›
         </button>
+        {weekStart !== thisWeek && (
+          <button className="quiet-btn" onClick={() => setWeekStart(thisWeek)}>
+            Back to this week
+          </button>
+        )}
       </div>
 
-      <p className="library-hint">
-        Pulled from this week's schedule — fresh veg, fruit, dairy &amp; tofu only, no pantry
-        staples. Check off what you've already got.
-      </p>
+      <section className="shop-progress">
+        <div>
+          <span className="shop-count">{picked}</span>
+          <span className="shop-count-rest">of {all.length} picked up</span>
+        </div>
+        <span className="shop-track">
+          <span style={{ width: all.length ? `${(picked / all.length) * 100}%` : '0%' }} />
+        </span>
+        <p className="shop-note">Fresh only — pantry staples stay off the list.</p>
+      </section>
 
       {isEmpty ? (
-        <div className="empty">Nothing here yet — plan some meals in Schedule first.</div>
+        <div className="empty">Nothing here yet — plan some meals first.</div>
       ) : (
         <ul className="grocery-list">
           {items.map((item) => (
-            <li key={item.ref} className={`grocery-item ${item.checked ? 'checked' : ''}`}>
-              <label className="grocery-check">
-                <input type="checkbox" checked={item.checked} onChange={() => toggleItem(item.ref)} />
+            <li key={item.ref}>
+              <button
+                className={`grocery-item press ${item.checked ? 'checked' : ''}`}
+                aria-pressed={item.checked}
+                onClick={() => toggleItem(item.ref)}
+              >
+                <span className="grocery-box">
+                  <Icon name="check" size={15} />
+                </span>
                 <span className="grocery-name">{item.name}</span>
-              </label>
-              <span className="grocery-grams">{Math.round(item.grams)} g</span>
+                <span className="grocery-grams">{Math.round(item.grams)} g</span>
+              </button>
             </li>
           ))}
           {extra.map((e) => (
-            <li key={e.id} className={`grocery-item ${e.checked ? 'checked' : ''}`}>
-              <label className="grocery-check">
-                <input type="checkbox" checked={e.checked} onChange={() => toggleExtra(e.id)} />
+            <li key={e.id} className="grocery-extra">
+              <button
+                className={`grocery-item press ${e.checked ? 'checked' : ''}`}
+                aria-pressed={e.checked}
+                onClick={() => toggleExtra(e.id)}
+              >
+                <span className="grocery-box">
+                  <Icon name="check" size={15} />
+                </span>
                 <span className="grocery-name">{e.text}</span>
-              </label>
-              <button className="remove-btn" aria-label="Remove item" onClick={() => removeExtra(e.id)}>
+              </button>
+              <button
+                className="grocery-remove"
+                aria-label={`Remove ${e.text}`}
+                onClick={() => removeExtra(e.id)}
+              >
                 ✕
               </button>
             </li>
@@ -111,8 +125,8 @@ export default function Grocery({ data, commit }) {
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && addExtra()}
         />
-        <button className="secondary-btn" onClick={addExtra}>
-          Add
+        <button className="add-extra-btn press" onClick={addExtra} aria-label="Add item">
+          <Icon name="plus" size={20} />
         </button>
       </div>
     </div>

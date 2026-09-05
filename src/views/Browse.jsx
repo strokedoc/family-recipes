@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { perServing, proteinDensity, fmt } from '../lib/nutrition.js'
+import Icon from '../components/Icon.jsx'
 
 const CATEGORIES = [
   { id: 'all', label: 'All' },
@@ -16,11 +17,10 @@ const SORTS = [
   { id: 'name', label: 'A–Z' },
 ]
 
-export default function Browse({ data, openRecipe, setNav }) {
+export default function Browse({ data, sort, setSort, openRecipe }) {
   const [category, setCategory] = useState('all')
   const [query, setQuery] = useState('')
   const [activeTags, setActiveTags] = useState([])
-  const [sort, setSort] = useState('density')
 
   const enriched = useMemo(
     () =>
@@ -61,32 +61,33 @@ export default function Browse({ data, openRecipe, setNav }) {
   return (
     <div className="browse">
       <div className="search-row">
-        <input
-          className="search"
-          type="search"
-          placeholder="Search recipes…"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <select
-          className="sort-select"
-          value={sort}
-          onChange={(e) => setSort(e.target.value)}
-          aria-label="Sort"
-        >
-          {SORTS.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.label}
-            </option>
-          ))}
-        </select>
+        <div className="search-field">
+          <Icon name="search" size={16} className="search-icon" />
+          <input
+            className="search"
+            type="search"
+            placeholder={`Search ${data.recipes.length} recipes`}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </div>
+        <div className="sort-btn">
+          <Icon name="sort" size={18} />
+          <select value={sort} onChange={(e) => setSort(e.target.value)} aria-label="Sort recipes">
+            {SORTS.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.label}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <nav className="cat-tabs">
         {CATEGORIES.map((c) => (
           <button
             key={c.id}
-            className={`cat-tab ${category === c.id ? 'active' : ''}`}
+            className={`cat-tab press ${category === c.id ? 'active' : ''}`}
             onClick={() => {
               setCategory(c.id)
               setActiveTags([])
@@ -102,7 +103,7 @@ export default function Browse({ data, openRecipe, setNav }) {
           {allTags.map((t) => (
             <button
               key={t}
-              className={`tag-chip ${activeTags.includes(t) ? 'active' : ''}`}
+              className={`tag-chip press ${activeTags.includes(t) ? 'active' : ''}`}
               onClick={() =>
                 setActiveTags((cur) =>
                   cur.includes(t) ? cur.filter((x) => x !== t) : [...cur, t],
@@ -117,27 +118,33 @@ export default function Browse({ data, openRecipe, setNav }) {
 
       <div className="cards">
         {shown.map(({ recipe, macros, density }) => (
-          <button key={recipe.id} className="card" onClick={() => openRecipe(recipe.id)}>
-            <div className="card-top">
-              <h3 className="card-name">{recipe.name}</h3>
-              <span className="density-badge" title="g protein per 100 kcal">
-                {fmt(density, 1)}
-                <small>P/100</small>
+          <button key={recipe.id} className="rcard press" onClick={() => openRecipe(recipe.id)}>
+            {/* The ring fills at 20 g protein per 100 kcal. */}
+            <span
+              className="ring"
+              style={{ '--pct': `${Math.min(100, density * 5)}%` }}
+              title="g protein per 100 kcal"
+            >
+              <span className="ring-inner">
+                <span className="ring-figure">{fmt(density, 1)}</span>
+                <span className="ring-micro">P/100</span>
               </span>
-            </div>
-            <div className="card-macros">
-              <span className="macro-kcal">{fmt(macros.kcal)} kcal</span>
-              <span className="macro-protein">{fmt(macros.protein)} g protein</span>
-              <span className="card-serving">per serving · makes {recipe.servings}</span>
-            </div>
+            </span>
+            <span className="rcard-text">
+              <span className="rcard-name">{recipe.name}</span>
+              <span className="rcard-metrics">
+                <span className="m-protein">
+                  {fmt(macros.protein)}
+                  <small> g P</small>
+                </span>
+                <span className="m-kcal">{fmt(macros.kcal)} kcal</span>
+                <span className="m-servings">×{recipe.servings}</span>
+              </span>
+            </span>
           </button>
         ))}
         {shown.length === 0 && <div className="empty">Nothing matches — clear a filter?</div>}
       </div>
-
-      <button className="fab" onClick={() => setNav({ view: 'new' })} aria-label="Add recipe">
-        + Recipe
-      </button>
     </div>
   )
 }

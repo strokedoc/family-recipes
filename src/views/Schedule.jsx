@@ -1,24 +1,36 @@
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import RecipePicker from '../components/RecipePicker.jsx'
 import {
   MEALS,
   MEAL_LABELS,
   slotIds,
   toISODate,
-  weekStartOf,
   weekDates,
   addDays,
+  weekStartOf,
   dayLabel,
   weekRangeLabel,
   isToday,
   autoFillWeek,
 } from '../lib/planner.js'
+import { perServing } from '../lib/nutrition.js'
 import { buildDay, dayTotals, dayBars, swapOptions, DAILY_TARGET } from '../lib/scheduler.js'
 import { balanceRecipes } from '../lib/balancer.js'
 import { applyOp } from '../lib/store.js'
 
 const emptyMacros = () => ({ kcal: '', protein: '', netCarbs: '', fat: '' })
 const TODAY_MACROS_KEY = 'rasoi.macros.today'
+const TARGET_KCAL_KEY = 'rasoi.target.kcal'
+// The shared plan is the default; the slider only moves the calorie ceiling the
+// balancer scores against, so a heavier or lighter day doesn't need new recipes.
+const TARGET_MIN = 1000
+const TARGET_MAX = 2500
+const TARGET_STEP = 50
+
+function loadTargetKcal() {
+  const saved = Number(localStorage.getItem(TARGET_KCAL_KEY))
+  return saved >= TARGET_MIN && saved <= TARGET_MAX ? saved : DAILY_TARGET.kcal
+}
 
 function loadTodayMacros(date) {
   try {
@@ -29,60 +41,71 @@ function loadTodayMacros(date) {
   }
 }
 
-export default function Schedule({ data, commit, openRecipe, showToast }) {
-  const [weekStart, setWeekStart] = useState(() => weekStartOf())
+export default function Schedule({ data, commit, openRecipe, showToast, weekStart, setWeekStart }) {
   const today = toISODate(new Date())
   const [balancerOpen, setBalancerOpen] = useState(false)
   const [todayMacros, setTodayMacros] = useState(() => loadTodayMacros(today))
   const [showSuggestions, setShowSuggestions] = useState(false)
+  const [picked, setPicked] = useState(null)
   // sheet: null | {mode:'single'|'add', date, meal} | {mode:'multi'}
   //             | {mode:'move', date, meal} | {mode:'swap', date, meal, recipeId}
   const [sheet, setSheet] = useState(null)
+  const selectedPill = useRef(null)
 
   const dates = weekDates(weekStart)
   const thisWeek = weekStartOf()
+  // One day at a time. Today when it's in view, otherwise the week's Monday.
+  const date = picked && dates.includes(picked) ? picked : dates.includes(today) ? today : dates[0]
 
-  const dayIsEmpty = (date) =>
-    MEALS.every((m) => slotIds(data.schedule?.[date]?.[m]).length === 0)
+  // Keep the focused day in view when the week (or the day) changes.
+  useEffect(() => {
+    selectedPill.current?.scrollIntoView({ inline: 'center', block: 'nearest' })
+  }, [date])
 
-  function setSlot(date, meal, ids) {
-    commit({ type: 'setMeal', date, meal, recipeId: ids })
+  const dayIsEmpty = (d) => MEALS.every((m) => slotIds(data.schedule?.[d]?.[m]).length === 0)
+
+  // The strip's status dots need a protein total for every day in the week.
+  const weekProtein = useMemo(
+    () => Object.fromEntries(dates.map((d) => [d, dayTotals(data, data.schedule?.[d] || {}).protein])),
+    [data, dates],
+  )
+
+  const day = data.schedule?.[date] || {}
+  const totals = dayTotals(data, day)
+  const bars = dayBars(totals)
+  const proteinBar = bars.find((b) => b.key === 'protein')
+  const ceilings = bars.filter((b) => b.kind === 'ceiling')
+
+  function setSlot(d, meal, ids) {
+    commit({ type: 'setMeal', date: d, meal, recipeId: ids })
     setSheet(null)
   }
 
-  function addToSlot(date, meal, id) {
-    const current = slotIds(data.schedule?.[date]?.[meal])
+  function addToSlot(d, meal, id) {
+    const current = slotIds(data.schedule?.[d]?.[meal])
     if (current.includes(id)) {
       setSheet(null)
       return showToast?.('That recipe is already in this meal.')
     }
-    setSlot(date, meal, [...current, id])
+    setSlot(d, meal, [...current, id])
   }
 
-  function removeFromSlot(date, meal, id) {
-    setSlot(
-      date,
-      meal,
-      slotIds(data.schedule?.[date]?.[meal]).filter((x) => x !== id),
-    )
+  function removeFromSlot(d, meal, id) {
+    setSlot(d, meal, slotIds(data.schedule?.[d]?.[meal]).filter((x) => x !== id))
   }
 
   function swapIn(newId) {
-    const { date, meal, recipeId } = sheet
-    setSlot(
-      date,
-      meal,
-      slotIds(data.schedule?.[date]?.[meal]).map((x) => (x === recipeId ? newId : x)),
-    )
+    const { date: d, meal, recipeId } = sheet
+    setSlot(d, meal, slotIds(data.schedule?.[d]?.[meal]).map((x) => (x === recipeId ? newId : x)))
   }
 
   // One click: build a balanced day and drop it in as a single edit.
-  function fillDay(date) {
-    if (!dayIsEmpty(date) && !window.confirm(`Replace everything scheduled for ${dayLabel(date).date}?`))
+  function fillDay(d) {
+    if (!dayIsEmpty(d) && !window.confirm(`Replace everything scheduled for ${dayLabel(d).date}?`))
       return
-    const { slots, warnings } = buildDay(data, date)
+    const { slots, warnings } = buildDay(data, d)
     if (!slots.lunch.length) return showToast?.(warnings[0] || 'Could not build that day.')
-    commit({ type: 'setDay', date, slots })
+    commit({ type: 'setDay', date: d, slots })
     if (warnings.length) showToast?.(warnings[0])
   }
 
@@ -94,19 +117,19 @@ export default function Schedule({ data, commit, openRecipe, showToast }) {
     let empty = 0
     let failed = 0
     const warned = []
-    for (const date of dates) {
-      if (!MEALS.every((m) => slotIds(working.schedule?.[date]?.[m]).length === 0)) continue
+    for (const d of dates) {
+      if (!MEALS.every((m) => slotIds(working.schedule?.[d]?.[m]).length === 0)) continue
       empty++
-      const { slots, warnings } = buildDay(working, date)
+      const { slots, warnings } = buildDay(working, d)
       if (!slots.lunch.length) {
         failed++
         continue
       }
-      const op = { type: 'setDay', date, slots }
+      const op = { type: 'setDay', date: d, slots }
       commit(op)
       working = applyOp(working, op)
       placed++
-      if (warnings.length) warned.push(dayLabel(date).weekday)
+      if (warnings.length) warned.push(dayLabel(d).weekday)
     }
     if (!empty) return showToast?.('Every day this week already has something scheduled.')
     if (!placed) return showToast?.('Could not build a day with the current planner recipes.')
@@ -142,34 +165,124 @@ export default function Schedule({ data, commit, openRecipe, showToast }) {
 
   function clearWeek() {
     if (!window.confirm(`Clear every meal for ${weekRangeLabel(weekStart)}?`)) return
-    for (const date of dates) {
-      const day = data.schedule?.[date] || {}
+    for (const d of dates) {
+      const scheduled = data.schedule?.[d] || {}
       for (const meal of MEALS) {
-        if (slotIds(day[meal]).length) commit({ type: 'setMeal', date, meal, recipeId: null })
+        if (slotIds(scheduled[meal]).length)
+          commit({ type: 'setMeal', date: d, meal, recipeId: null })
       }
     }
   }
 
   const swapping = sheet?.mode === 'swap' ? data.recipes.find((r) => r.id === sheet.recipeId) : null
+  const label = dayLabel(date)
 
   return (
     <div className="schedule">
-      <div className="week-nav">
-        <button className="icon-btn" onClick={() => setWeekStart((w) => addDays(w, -7))} aria-label="Previous week">
+      {/* The header names the week, so the arrows sit on the strip itself. */}
+      <div className="strip-row">
+        <button
+          className="icon-btn press"
+          onClick={() => setWeekStart(addDays(weekStart, -7))}
+          aria-label="Previous week"
+        >
           ‹
         </button>
-        <div className="week-label-wrap">
-          <span className="week-label">{weekRangeLabel(weekStart)}</span>
-          {weekStart !== thisWeek && (
-            <button className="link-btn today-btn" onClick={() => setWeekStart(thisWeek)}>
-              Today
+        <div className="day-strip">
+        {dates.map((d) => {
+          const p = weekProtein[d]
+          const dot = p >= DAILY_TARGET.proteinMin ? 'hit' : p > 0 ? 'part' : ''
+          return (
+            <button
+              key={d}
+              ref={d === date ? selectedPill : null}
+              className={`day-pill press ${d === date ? 'sel' : ''}`}
+              aria-pressed={d === date}
+              onClick={() => setPicked(d)}
+            >
+              <span className="day-pill-wd">{dayLabel(d).weekday}</span>
+              <span className="day-pill-date">{dayLabel(d).date.split(' ')[1]}</span>
+              <span className={`day-dot ${dot}`} />
             </button>
-          )}
+          )
+          })}
         </div>
-        <button className="icon-btn" onClick={() => setWeekStart((w) => addDays(w, 7))} aria-label="Next week">
+        <button
+          className="icon-btn press"
+          onClick={() => setWeekStart(addDays(weekStart, 7))}
+          aria-label="Next week"
+        >
           ›
         </button>
       </div>
+
+      <div className="plan-bar">
+        <button className="autofill-btn press" onClick={() => fillDay(date)}>
+          {dayIsEmpty(date) ? '✨ Fill this day' : '↻ Rebuild this day'}
+        </button>
+        {weekStart !== thisWeek && (
+          <button className="quiet-btn" onClick={() => setWeekStart(thisWeek)}>
+            Back to today
+          </button>
+        )}
+      </div>
+      <div className="week-actions">
+        <button className="quiet-btn" onClick={fillWeek}>
+          Fill week
+        </button>
+        <button className="quiet-btn" onClick={() => setSheet({ mode: 'multi' })}>
+          Add specific
+        </button>
+        <button className="quiet-btn" onClick={clearWeek}>
+          Clear week
+        </button>
+      </div>
+
+      {/* Protein is the floor to clear; calories, net carbs and fat are ceilings. */}
+      <section className="day-total">
+        <div className="day-total-head">
+          <span className="card-label">Day total</span>
+          <span className="day-total-date">
+            {label.weekday}, {label.date}
+            {isToday(date) ? ' · today' : ''}
+          </span>
+        </div>
+        <div className="day-total-body">
+          <span
+            className="dial"
+            style={{
+              '--pct': `${Math.min(100, (totals.protein / DAILY_TARGET.protein) * 100)}%`,
+              '--dial-color': proteinBar.hit ? 'var(--olive)' : 'var(--amber)',
+            }}
+          >
+            <span className="dial-inner">
+              <span className="dial-figure">{Math.round(totals.protein)}</span>
+              <span className="dial-label">G PROTEIN</span>
+            </span>
+          </span>
+          <div className="ceilings">
+            {ceilings.map((b) => (
+              <div key={b.key} className={`ceiling ${b.over ? 'over' : ''}`}>
+                <div className="ceiling-head">
+                  <span>{b.label}</span>
+                  <span className="ceiling-val">
+                    {Math.round(b.value)}/{b.target}
+                  </span>
+                </div>
+                <span className="bar-track">
+                  <span
+                    className="bar-fill"
+                    style={{ width: `${Math.min(100, (b.value / b.target) * 100)}%` }}
+                  />
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <p className="day-total-note">
+          Protein is the floor to clear — {DAILY_TARGET.proteinMin} g minimum. The rest are ceilings.
+        </p>
+      </section>
 
       <MacroBalancer
         date={today}
@@ -183,89 +296,58 @@ export default function Schedule({ data, commit, openRecipe, showToast }) {
         openRecipe={openRecipe}
       />
 
-      <div className="plan-bar">
-        <button className="autofill-btn" onClick={fillWeek}>
-          ✨ Fill empty days
-        </button>
-        <button className="link-btn" onClick={() => setSheet({ mode: 'multi' })}>
-          Add specific
-        </button>
-        <button className="link-btn" onClick={clearWeek}>
-          Clear week
-        </button>
-      </div>
-
-      <div className="day-list">
-        {dates.map((date) => {
-          const day = data.schedule?.[date] || {}
-          const empty = dayIsEmpty(date)
-          const totals = dayTotals(data, day)
-          return (
-            <div key={date} className={`day-card ${isToday(date) ? 'today' : ''}`}>
-              <div className="day-head">
-                <span className="day-weekday">{dayLabel(date).weekday}</span>
-                <span className="day-date">{dayLabel(date).date}</span>
-                <button className="day-fill" onClick={() => fillDay(date)}>
-                  {empty ? '✨ Fill' : '↻ Rebuild'}
+      {MEALS.map((meal) => {
+        const ids = slotIds(day[meal])
+        const mealProtein = ids.reduce((sum, id) => {
+          const r = data.recipes.find((x) => x.id === id)
+          return sum + (r ? perServing(r, data.ingredients).protein : 0)
+        }, 0)
+        return (
+          <section key={meal} className="meal-card">
+            <div className="meal-head">
+              <span className="meal-label">{MEAL_LABELS[meal]}</span>
+              <span className="meal-rule" />
+              <span className="meal-total">{ids.length ? `${Math.round(mealProtein)} g P` : '—'}</span>
+              {ids.length > 0 && (
+                <button
+                  className="meal-move"
+                  aria-label={`Move ${MEAL_LABELS[meal]}`}
+                  onClick={() => setSheet({ mode: 'move', date, meal })}
+                >
+                  ⤢
                 </button>
-              </div>
-
-              <div className="meal-rows">
-                {MEALS.map((meal) => {
-                  const ids = slotIds(day[meal])
-                  return (
-                    <div key={meal} className="meal-row">
-                      <span className="meal-label">{MEAL_LABELS[meal]}</span>
-                      <div className="meal-items">
-                        {ids.map((id) => {
-                          const r = data.recipes.find((x) => x.id === id)
-                          return (
-                            <span key={id} className="meal-chip">
-                              <button
-                                className="meal-chip-name"
-                                aria-label={`Swap ${r?.name || id}`}
-                                title="Tap to swap for something similar"
-                                onClick={() => setSheet({ mode: 'swap', date, meal, recipeId: id })}
-                              >
-                                {r ? r.name : id}
-                              </button>
-                              <button
-                                className="meal-chip-x"
-                                aria-label={`Remove ${r?.name || id}`}
-                                onClick={() => removeFromSlot(date, meal, id)}
-                              >
-                                ✕
-                              </button>
-                            </span>
-                          )
-                        })}
-                        <button
-                          className="meal-add"
-                          aria-label={`Add to ${MEAL_LABELS[meal]}`}
-                          onClick={() => setSheet({ mode: 'add', date, meal })}
-                        >
-                          +
-                        </button>
-                        {ids.length > 0 && (
-                          <button
-                            className="meal-move"
-                            aria-label={`Move ${MEAL_LABELS[meal]}`}
-                            onClick={() => setSheet({ mode: 'move', date, meal })}
-                          >
-                            ⤢
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-
-              {!empty && <DayBars totals={totals} />}
+              )}
             </div>
-          )
-        })}
-      </div>
+            {ids.map((id) => {
+              const r = data.recipes.find((x) => x.id === id)
+              const p = r ? Math.round(perServing(r, data.ingredients).protein) : 0
+              return (
+                <div key={id} className="meal-item">
+                  <span className="meal-bullet" />
+                  <button
+                    className="meal-item-name"
+                    title="Tap to swap for something similar"
+                    onClick={() => setSheet({ mode: 'swap', date, meal, recipeId: id })}
+                  >
+                    {r ? r.name : id}
+                  </button>
+                  <span className="meal-item-p">{p}g</span>
+                  <button
+                    className="meal-item-x"
+                    aria-label={`Remove ${r?.name || id}`}
+                    onClick={() => removeFromSlot(date, meal, id)}
+                  >
+                    ✕
+                  </button>
+                </div>
+              )
+            })}
+            <button className="meal-add press" onClick={() => setSheet({ mode: 'add', date, meal })}>
+              + Add
+            </button>
+          </section>
+        )
+      })}
 
       {(sheet?.mode === 'add' || sheet?.mode === 'single') && (
         <RecipePicker
@@ -327,22 +409,22 @@ export default function Schedule({ data, commit, openRecipe, showToast }) {
               </button>
             </div>
             <div className="move-grid">
-              {dates.map((date) => (
-                <div key={date} className="move-day">
+              {dates.map((d) => (
+                <div key={d} className="move-day">
                   <span className="move-day-label">
-                    {dayLabel(date).weekday} {dayLabel(date).date}
+                    {dayLabel(d).weekday} {dayLabel(d).date}
                   </span>
                   <div className="move-slots">
                     {MEALS.map((meal) => {
-                      const occ = slotIds(data.schedule?.[date]?.[meal]).length
-                      const here = date === sheet.date && meal === sheet.meal
+                      const occ = slotIds(data.schedule?.[d]?.[meal]).length
+                      const here = d === sheet.date && meal === sheet.meal
                       return (
                         <button
                           key={meal}
                           className={`move-slot ${occ ? 'occ' : ''} ${here ? 'here' : ''}`}
                           disabled={here}
                           title={MEAL_LABELS[meal]}
-                          onClick={() => move(date, meal)}
+                          onClick={() => move(d, meal)}
                         >
                           {MEAL_LABELS[meal][0]}
                         </button>
@@ -371,8 +453,16 @@ function MacroBalancer({
   data,
   openRecipe,
 }) {
-  const suggestions = showSuggestions ? balanceRecipes(data, macros) : []
+  const [targetKcal, setTargetKcal] = useState(loadTargetKcal)
+  const target = { ...DAILY_TARGET, kcal: targetKcal }
+  const suggestions = showSuggestions ? balanceRecipes(data, macros, { target }) : []
   const protein = Number(macros.protein) || 0
+
+  function updateTarget(value) {
+    const next = Number(value)
+    setTargetKcal(next)
+    localStorage.setItem(TARGET_KCAL_KEY, String(next))
+  }
 
   function update(key, value) {
     const next = { ...macros, [key]: value }
@@ -396,7 +486,7 @@ function MacroBalancer({
       >
         <span>
           <strong>Balance today</strong>
-          <small>Enter Vruddhi's totals so far</small>
+          <small>Enter totals so far</small>
         </span>
         <span aria-hidden="true">{open ? '−' : '+'}</span>
       </button>
@@ -423,6 +513,28 @@ function MacroBalancer({
               </label>
             ))}
           </div>
+          <div className="target-slider">
+            <div className="target-head">
+              <span>Target calories</span>
+              <span className="target-val">
+                {targetKcal} kcal
+                {targetKcal !== DAILY_TARGET.kcal && (
+                  <button className="quiet-btn" onClick={() => updateTarget(DAILY_TARGET.kcal)}>
+                    Reset
+                  </button>
+                )}
+              </span>
+            </div>
+            <input
+              type="range"
+              min={TARGET_MIN}
+              max={TARGET_MAX}
+              step={TARGET_STEP}
+              value={targetKcal}
+              onChange={(event) => updateTarget(event.target.value)}
+              aria-label="Target calories"
+            />
+          </div>
           <p className="balancer-privacy">
             Saved only on this device—not added to the shared recipe file.
           </p>
@@ -440,12 +552,12 @@ function MacroBalancer({
               <p className="suggestion-summary">
                 {protein >= DAILY_TARGET.proteinMin
                   ? 'Protein is already in the good range. Best fits within the remaining macros:'
-                  : `Best one-serving fits toward ${DAILY_TARGET.kcal} kcal and ${DAILY_TARGET.proteinAim}–${DAILY_TARGET.protein} g protein:`}
+                  : `Best one-serving fits toward ${targetKcal} kcal and ${DAILY_TARGET.proteinAim}–${DAILY_TARGET.protein} g protein:`}
               </p>
               {suggestions.map((item, index) => (
                 <button
                   key={item.recipe.id}
-                  className="suggestion-card"
+                  className="suggestion-card press"
                   onClick={() => openRecipe(item.recipe.id)}
                 >
                   <span className="suggestion-topline">
@@ -456,7 +568,7 @@ function MacroBalancer({
                     Adds {Math.round(item.macros.kcal)} kcal · {Math.round(item.macros.protein)} g protein
                   </span>
                   <span className="suggestion-after">
-                    After: {Math.round(item.after.kcal)}/{DAILY_TARGET.kcal} kcal ·{' '}
+                    After: {Math.round(item.after.kcal)}/{targetKcal} kcal ·{' '}
                     {Math.round(item.after.protein)}/{DAILY_TARGET.protein} g protein ·{' '}
                     {Math.round(item.after.netCarbs)}/{DAILY_TARGET.netCarbs} g net carbs ·{' '}
                     {Math.round(item.after.fat)}/{DAILY_TARGET.fat} g fat
@@ -475,36 +587,4 @@ function MacroBalancer({
 function fmtDelta(n) {
   const v = Math.round(n)
   return v > 0 ? `+${v}` : `${v}`
-}
-
-// Protein fills toward a number you want to reach; the other three are ceilings.
-// Net carbs, not total — fiber runs high here, so total would read over most days.
-function DayBars({ totals }) {
-  const bars = dayBars(totals)
-  const floorPct = (DAILY_TARGET.proteinMin / DAILY_TARGET.protein) * 100
-  return (
-    <div className="day-bars">
-      {bars.map((b) => {
-        const pct = Math.max(0, Math.min(100, (b.value / b.target) * 100))
-        const state = b.kind === 'reach' ? (b.hit ? 'hit' : 'short') : b.over ? 'over' : 'under'
-        return (
-          <div key={b.key} className={`bar-row ${b.kind} ${state}`}>
-            <span className="bar-label">{b.label}</span>
-            <span className="bar-track">
-              <span className="bar-fill" style={{ width: `${pct}%` }} />
-              {b.kind === 'reach' && <span className="bar-tick" style={{ left: `${floorPct}%` }} />}
-            </span>
-            <span className="bar-val">
-              {Math.round(b.value)}
-              <span className="bar-target">/{b.target}</span>
-            </span>
-          </div>
-        )
-      })}
-      <p className="bars-note">
-        Shared baseline · {DAILY_TARGET.proteinMin} g protein is good, aim for{' '}
-        {DAILY_TARGET.proteinAim}–{DAILY_TARGET.protein} g
-      </p>
-    </div>
-  )
 }

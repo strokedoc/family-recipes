@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { fmt, recipesUsing } from '../lib/nutrition.js'
+import Icon from '../components/Icon.jsx'
 
 const MACROS = ['kcal', 'protein', 'carbs', 'fat', 'fiber']
 
@@ -10,7 +11,7 @@ function slugify(name) {
     .replace(/^-+|-+$/g, '')
 }
 
-export default function Library({ data, commit, showToast, onBack }) {
+export default function Library({ data, commit, showToast }) {
   const [q, setQ] = useState('')
   const [editing, setEditing] = useState(null) // key being edited, or '__new__'
 
@@ -49,26 +50,24 @@ export default function Library({ data, commit, showToast, onBack }) {
 
   return (
     <div className="library">
-      <div className="detail-nav">
-        <button className="back-btn" onClick={onBack}>
-          ← Back
-        </button>
-        <button className="primary-btn" onClick={() => setEditing('__new__')}>
+      <div className="search-row">
+        <div className="search-field">
+          <Icon name="search" size={16} className="search-icon" />
+          <input
+            className="search"
+            type="search"
+            placeholder="Search ingredients…"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+          />
+        </div>
+        <button className="pantry-add press" onClick={() => setEditing('__new__')}>
           + Ingredient
         </button>
       </div>
-      <h1 className="detail-title">Ingredient library</h1>
       <p className="library-hint">
-        Per-100g values drive every recipe number. Calibrated something against Cronometer? Fix it
-        here and all recipes update.
+        Per-100g values drive every recipe number. Fix one here and all recipes update.
       </p>
-      <input
-        className="search"
-        type="search"
-        placeholder="Search ingredients…"
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-      />
       <ul className="lib-list">
         {entries.map(({ key, ing }) => (
           <li key={key} className="lib-row-wrap">
@@ -80,11 +79,18 @@ export default function Library({ data, commit, showToast, onBack }) {
                 onDelete={() => deleteIngredient(key)}
               />
             ) : (
-              <button className="lib-row" onClick={() => setEditing(key)}>
-                <span className="picker-name">{ing.name}</span>
-                <span className="picker-macros">
-                  {fmt(ing.per100g.kcal)} kcal · P{fmt(ing.per100g.protein, 1)} · C
-                  {fmt(ing.per100g.carbs, 1)} · F{fmt(ing.per100g.fat, 1)} /100g
+              <button className="lib-row press" onClick={() => setEditing(key)}>
+                <span className="lib-top">
+                  <span className="lib-name">{ing.name}</span>
+                  <span className="lib-protein">{fmt(ing.per100g.protein, 1)} g P</span>
+                </span>
+                <SplitBar per100g={ing.per100g} />
+                <span className="lib-meta">
+                  <span>{fmt(ing.per100g.kcal)} kcal</span>
+                  <span>C {fmt(ing.per100g.carbs, 1)}</span>
+                  <span>F {fmt(ing.per100g.fat, 1)}</span>
+                  <span>fiber {fmt(ing.per100g.fiber, 1)}</span>
+                  <span className="per100">per 100 g</span>
                 </span>
               </button>
             )}
@@ -104,6 +110,23 @@ export default function Library({ data, commit, showToast, onBack }) {
         </div>
       )}
     </div>
+  )
+}
+
+// Calorie share, not gram share: "is this a protein source or a fat source"
+// legible without reading a single number.
+function SplitBar({ per100g }) {
+  const p = (per100g.protein || 0) * 4
+  const c = (per100g.carbs || 0) * 4
+  const f = (per100g.fat || 0) * 9
+  const total = p + c + f
+  if (!total) return null
+  return (
+    <span className="split-bar" aria-hidden="true">
+      <span style={{ width: `${(p / total) * 100}%` }} />
+      <span style={{ width: `${(c / total) * 100}%` }} />
+      <span style={{ width: `${(f / total) * 100}%` }} />
+    </span>
   )
 }
 
